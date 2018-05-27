@@ -25,6 +25,8 @@ fi
 export LD_LIBRARY_PATH="${ADD_LD_LIBRARY_PATH}:$LD_LIBRARY_PATH"
 
 export PATH="${ADD_PATH}:$PATH"
+export LIBVA_DRIVERS_PATH=${INSTALL_DIR}/lib/dri/
+export LIBVA_DRIVER_NAME=iHD
 
 echo "*======================current configuration============================="
 echo "* VAAPI_PREFIX:               $VAAPI_PREFIX"
