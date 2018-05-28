@@ -24,12 +24,12 @@ make fate-rsync SAMPLES=fate-suite/
 
 1. build libva(VA-API)/libva-utils
 
-   * $ ./configure && make -j `nproc` && sudo make install
+* $ ./configure && make -j `nproc` && sudo make install
 
 
 2. build media-driver
 
-   * Get gmmlib and media repo and format the workspace folder as below (suggest the workspace to be a dedicated one for media driver build):
+* Get gmmlib and media repo and format the workspace folder as below (suggest the workspace to be a dedicated one for media driver build):
 
 ```
 <workspace>
@@ -37,11 +37,11 @@ make fate-rsync SAMPLES=fate-suite/
     |- media-driver
 ```
 
-    * mkdir <workspace>/build
+* mkdir <workspace>/build
 
-    * cd <workspace>/build and run cmake like this:
+cd <workspace>/build and run cmake like this:
 
-    * cmake ../media-driver \
+* cmake ../media-driver \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DMEDIA_VERSION="2.0.0" \
     -DBUILD_ALONG_WITH_CMRTLIB=1 \
@@ -50,4 +50,4 @@ make fate-rsync SAMPLES=fate-suite/
     -DBS_DIR_INC=`pwd`/../gmmlib/Source/inc/ \
     -DBS_DIR_MEDIA=`pwd`/../media-driver
 
-    * make -j `nproc` && sudo make install
+ * make -j `nproc` && sudo make install
