@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -x
 if [ -n "$1" ]; then
     export export INSTALL_DIR=$1
 else
@@ -38,4 +37,3 @@ echo "*=========================================================================
 echo "* libva & libva-utils:      git clean -dxf && ./autogen.sh --prefix=\$VAAPI_PREFIX && make -j8 && make install"
 echo "* ffmpeg:     git clean -dxf && ./configure --prefix=\$VAAPI_PREFIX && make -j8 && make install"
 #echo "* libyami & utils:    git clean -dxf && ./autogen.sh --prefix=\$LIBYAMI_PREFIX && make -j8 && make install"
-set +x
