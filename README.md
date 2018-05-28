@@ -4,28 +4,56 @@
 
 libva/libva-utils/media-driver/gmmlib/ffmpeg
 
-1. git clone https://github.com/intel/libva.git
+* git clone https://github.com/intel/libva.git libva
 
-2. git clone https://github.com/intel/libva-utils.git
+* git clone https://github.com/intel/libva-utils.git libva-utils
 
-3. git clone https://github.com/intel/media-driver.git
+* git clone https://github.com/intel/media-driver.git media-driver
 
-4. git clone https://github.com/intel/gmmlib.git
+* git clone https://github.com/intel/gmmlib.git gmmlib
 
-5. git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
+* git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
 
 ####  FATE
 
 If you want to run FATE on your machine you need to have the samples in place. You can get the samples via the build target fate-rsync. Use this command from the top-level source directory:
 
-make fate-rsync SAMPLES=fate-suite/
+* make fate-rsync SAMPLES=fate-suite/
+
+#### Dependencies
+
+ These are packages required for compiling, but you can remove them when you are done if you prefer:
+
+FFmpeg dependencies:
+
+* sudo apt-get update -qq && sudo apt-get -y install \
+  autoconf \
+  automake \
+  build-essential \
+  cmake \
+  git \
+  libass-dev \
+  libfreetype6-dev \
+  libsdl2-dev \
+  libtool \
+  libvorbis-dev \
+  libxcb1-dev \
+  libxcb-shm0-dev \
+  libxcb-xfixes0-dev \
+  pkg-config \
+  texinfo \
+  wget \
+  zlib1g-dev
+
+media-driver dependencies:
+
+* sudo apt install libdrm-dev xorg xorg-dev libx11-dev libgl1-mesa-glx libgl1-mesa-dev
 
 ####  Build and Install
 
 1. build libva(VA-API)/libva-utils
 
 * $ ./configure && make -j `nproc` && sudo make install
-
 
 2. build media-driver
 
