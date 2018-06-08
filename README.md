@@ -46,7 +46,8 @@ If you want to run FATE on your machine you need to have the samples in place. Y
   pkg-config \
   texinfo \
   wget \
-  zlib1g-dev
+  zlib1g-dev \
+  nasm
 ```
 
 * media-driver dependencies:
@@ -90,6 +91,8 @@ cmake ../media-driver \
     -DBS_DIR_MEDIA=`pwd`/../media-driver
 ```
 
+if want to debug media-driver, add -DBUILD_TYPE=Debug option
+
 ```
 make -j `nproc` && sudo make install
 ```
@@ -109,7 +112,8 @@ export LIBVA_DRIVERS_PATH=<path-contains-iHD_drv_video.so>
 export LIBVA_DRIVER_NAME=iHD
 ```
 
-If everything is Ok, you can check this with vainfo:
+If everything is Ok, you can check this with vainfo, will get same output
+like this:
 
 ```
 $ vainfo 
@@ -155,4 +159,11 @@ vainfo: Supported profile and entrypoints
 
 ```
 $ ./configure --enable-libx264 --enable-libx265 --enable-gpl --samples=../fate-suite/
+```
+
+verify the ffmpeg with VA-API hwaccel with the command:
+
+
+```
+$ ./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -hwaccel_device /dev/dri/renderD128 -i input.mp4 -c:v h264_vaapi output.mp4
 ```
