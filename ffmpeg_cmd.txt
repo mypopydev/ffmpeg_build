@@ -1,3 +1,7 @@
 1. FFmpeg with openCL
 
 ffmpeg -init_hw_device opencl=ocl:,device_type=gpu
+
+ffmpeg -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -loglevel 99
+
+ffmpeg -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -hwaccel vaapi -hwaccel_device va -hwaccel_output_format vaapi -i INPUT -filter_hw_device ocl -filter_complex '[0:v]hwmap,tonemap_opencl=t=bt2020:tonemap=linear:format=p010[x1]; [x1]hwmap=derive_device=vaapi:reverse=1' -c:v hevc_vaapi -profile 2 OUTPUT
