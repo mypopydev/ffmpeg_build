@@ -5,3 +5,5 @@ ffmpeg -init_hw_device opencl=ocl:,device_type=gpu
 ffmpeg -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -loglevel 99
 
 ffmpeg -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -hwaccel vaapi -hwaccel_device va -hwaccel_output_format vaapi -i INPUT -filter_hw_device ocl -filter_complex '[0:v]hwmap,tonemap_opencl=t=bt2020:tonemap=linear:format=p010[x1]; [x1]hwmap=derive_device=vaapi:reverse=1' -c:v hevc_vaapi -profile 2 OUTPUT
+
+./ffmpeg_g -y -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -hwaccel vaapi -hwaccel_device va -hwaccel_output_format vaapi -i ../../../Videos/skyfall2-trailer.mp4 -f image2 -r 1 -i overlays/%d.png -an -filter_hw_device ocl -filter_complex '[1:v]format=yuva420p,hwupload[x2]; [0:v]scale_vaapi=1280:720:yuv420p,hwmap[x1]; [x1][x2]overlay_opencl=0:0,program_opencl=test.cl:rotate_image,unsharp_opencl=lx=17:ly=17:la=5,hwmap=derive_device=vaapi:reverse=1,scale_vaapi=1280:720:nv12' -c:v h264_vaapi -frames:v 1000 out.mp4
