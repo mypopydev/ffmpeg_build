@@ -7,3 +7,39 @@ ffmpeg -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@v
 ffmpeg -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -hwaccel vaapi -hwaccel_device va -hwaccel_output_format vaapi -i INPUT -filter_hw_device ocl -filter_complex '[0:v]hwmap,tonemap_opencl=t=bt2020:tonemap=linear:format=p010[x1]; [x1]hwmap=derive_device=vaapi:reverse=1' -c:v hevc_vaapi -profile 2 OUTPUT
 
 ./ffmpeg_g -y -init_hw_device vaapi=va:/dev/dri/renderD128 -init_hw_device opencl=ocl@va -hwaccel vaapi -hwaccel_device va -hwaccel_output_format vaapi -i ../../../Videos/skyfall2-trailer.mp4 -f image2 -r 1 -i overlays/%d.png -an -filter_hw_device ocl -filter_complex '[1:v]format=yuva420p,hwupload[x2]; [0:v]scale_vaapi=1280:720:yuv420p,hwmap[x1]; [x1][x2]overlay_opencl=0:0,program_opencl=test.cl:rotate_image,unsharp_opencl=lx=17:ly=17:la=5,hwmap=derive_device=vaapi:reverse=1,scale_vaapi=1280:720:nv12' -c:v h264_vaapi -frames:v 1000 out.mp4
+
+
+test.cl:
+
+__kernel void rotate_image(__write_only image2d_t dst,
+                           __read_only  image2d_t src,
+                           unsigned int index)
+{
+  const sampler_t sampler = (CLK_NORMALIZED_COORDS_FALSE |
+                             CLK_FILTER_LINEAR);
+
+  float angle = (float)index / 100;
+
+  float2 dst_dim = convert_float2(get_image_dim(dst));
+  float2 src_dim = convert_float2(get_image_dim(src));
+
+  float2 dst_cen = dst_dim / 2;
+  float2 src_cen = src_dim / 2;
+
+  int2   dst_loc = (int2)(get_global_id(0), get_global_id(1));
+
+  float2 dst_pos = convert_float2(dst_loc) - dst_cen;
+  float2 src_pos = {
+    cos(angle) * dst_pos.x - sin(angle) * dst_pos.y,
+    sin(angle) * dst_pos.x + cos(angle) * dst_pos.y
+  };
+  src_pos = src_pos * src_dim / dst_dim;
+
+  float2 src_loc = src_pos + src_cen;
+
+  if (src_loc.x < 0         || src_loc.y < 0 ||
+      src_loc.x > src_dim.x || src_loc.y > src_dim.y)
+    write_imagef(dst, dst_loc, 0.5);
+  else
+    write_imagef(dst, dst_loc, read_imagef(src, sampler, src_loc));
+}
