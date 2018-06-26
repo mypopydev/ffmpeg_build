@@ -53,3 +53,7 @@ Image *VASurface::createSharedVaSurface(Context *context, VASharingFunctions *sh
 ./ffmpeg -i ../../../Videos/a.ts -filter_complex "minterpolate=mi_mode=blend:scd=fdiff:scd_threshold=1" -f null /dev/null
 
 ./ffmpeg -i ../../../Videos/a.ts -filter_complex "minterpolate=mi_mode=mci:mc_mode=aobmc:vsbmc=1" -f null /dev/null
+
+git diff d7bc52bf456deba0f32d9fe5c288ec441f1ebef5^..d7bc52bf456deba0f32d9fe5c288ec441f1ebef5 // fast copy (SSE4)
+
+https://blogs.gnome.org/rbultje/2017/07/14/writing-x86-simd-using-x86inc-asm/
