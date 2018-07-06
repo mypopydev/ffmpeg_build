@@ -60,3 +60,6 @@ https://blogs.gnome.org/rbultje/2017/07/14/writing-x86-simd-using-x86inc-asm/
 
 
 ./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i ../../../Videos/Allegro_HEVC_Main_HT50_INTRA_07_192x200@60Hz_3.1.bin -f null /dev/null -loglevel 99 // auto insert scale
+
+
+./ffmpeg_g -threads 1 -thread_type slice+frame -hwaccel vaapi  -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i  ../../../Videos/Allegro_HEVC_Main_HT50_INTRA_07_192x200@60Hz_3.1.bin -f null /dev/null -loglevel 99 -report
