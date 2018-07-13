@@ -61,5 +61,112 @@ https://blogs.gnome.org/rbultje/2017/07/14/writing-x86-simd-using-x86inc-asm/
 
 ./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i ../../../Videos/Allegro_HEVC_Main_HT50_INTRA_07_192x200@60Hz_3.1.bin -f null /dev/null -loglevel 99 // auto insert scale
 
+hls_slice_header
+
+(gdb) bt
+#0  configure_output_video_filter (fg=0x555557a9bd80, ofilter=0x555557a52a00, out=0x555557d13300) at fftools/ffmpeg_filter.c:448
+#1  0x0000555555653b5f in configure_output_filter (fg=0x555557a9bd80, ofilter=0x555557a52a00, out=0x555557d13300) at fftools/ffmpeg_filter.c:677
+#2  0x000055555565576b in configure_filtergraph (fg=0x555557a9bd80) at fftools/ffmpeg_filter.c:1098
+#3  0x0000555555666881 in ifilter_send_frame (ifilter=0x555557ce4640, frame=0x555557d39680) at fftools/ffmpeg.c:2187
+#4  0x0000555555666ba7 in send_frame_to_filters (ist=0x555557a50a40, decoded_frame=0x555557d39680) at fftools/ffmpeg.c:2268
+#5  0x0000555555667a14 in decode_video (ist=0x555557a50a40, pkt=0x7fffffffd030, got_output=0x7fffffffd018, duration_pts=0x7fffffffd028, eof=0, decode_failed=0x7fffffffd020)
+    at fftools/ffmpeg.c:2469
+#6  0x0000555555668437 in process_input_packet (ist=0x555557a50a40, pkt=0x7fffffffd270, no_eof=0) at fftools/ffmpeg.c:2623
+#7  0x000055555566fe28 in process_input (file_index=0) at fftools/ffmpeg.c:4505
+#8  0x00005555556703e7 in transcode_step () at fftools/ffmpeg.c:4625
+#9  0x0000555555670564 in transcode () at fftools/ffmpeg.c:4679
+#10 0x0000555555670f34 in main (argc=13, argv=0x7fffffffdbd8) at fftools/ffmpeg.c:4886
+
+gdb) bt
+#0  configure_output_video_filter (fg=0x555557a9bd80, ofilter=0x555557a52a00, out=0x555557ac6800) at fftools/ffmpeg_filter.c:448
+#1  0x0000555555653b5f in configure_output_filter (fg=0x555557a9bd80, ofilter=0x555557a52a00, out=0x555557ac6800) at fftools/ffmpeg_filter.c:677
+#2  0x000055555565576b in configure_filtergraph (fg=0x555557a9bd80) at fftools/ffmpeg_filter.c:1098
+#3  0x0000555555666881 in ifilter_send_frame (ifilter=0x555557ce4640, frame=0x555557d39680) at fftools/ffmpeg.c:2187
+#4  0x0000555555666ba7 in send_frame_to_filters (ist=0x555557a50a40, decoded_frame=0x555557d39680) at fftools/ffmpeg.c:2268
+#5  0x0000555555667a14 in decode_video (ist=0x555557a50a40, pkt=0x7fffffffd030, got_output=0x7fffffffd018, duration_pts=0x7fffffffd028, eof=0, decode_failed=0x7fffffffd020)
+    at fftools/ffmpeg.c:2469
+#6  0x0000555555668437 in process_input_packet (ist=0x555557a50a40, pkt=0x7fffffffd270, no_eof=0) at fftools/ffmpeg.c:2623
+#7  0x000055555566fe28 in process_input (file_index=0) at fftools/ffmpeg.c:4505
+#8  0x00005555556703e7 in transcode_step () at fftools/ffmpeg.c:4625
+#9  0x0000555555670564 in transcode () at fftools/ffmpeg.c:4679
+#10 0x0000555555670f34 in main (argc=13, argv=0x7fffffffdbd8) at fftools/ffmpeg.c:4886
+
+ifilter_send_frame // need_reinit // why
+(ifilter->hw_frames_ctx && ifilter->hw_frames_ctx->data != frame->hw_frames_ctx->data)
+
+Number 1: 
+(gdb) bt
+#0  av_hwframe_ctx_alloc (device_ref_in=0x555557ab3200) at libavutil/hwcontext.c:244
+#1  0x0000555555c19412 in avcodec_get_hw_frames_parameters (avctx=0x555557ab47c0, device_ref=0x555557ab3200, hw_pix_fmt=AV_PIX_FMT_VAAPI_VLD, out_frames_ref=0x555557ab4bb0)
+    at libavcodec/decode.c:1223
+#2  0x0000555555c192e5 in ff_decode_get_hw_frames_ctx (avctx=0x555557ab47c0, dev_type=AV_HWDEVICE_TYPE_VAAPI) at libavcodec/decode.c:1176
+#3  0x00005555567773ea in ff_vaapi_decode_init (avctx=0x555557ab47c0) at libavcodec/vaapi_decode.c:659
+#4  0x0000555555c195c3 in hwaccel_init (avctx=0x555557ab47c0, hw_config=0x5555571d85b0 <__compound_literal.0>) at libavcodec/decode.c:1273
+#5  0x0000555555c19ac0 in ff_get_format (avctx=0x555557ab47c0, fmt=0x7fffebfb0c2c) at libavcodec/decode.c:1412
+#6  0x0000555555f4df9a in ff_thread_get_format (avctx=0x555557ab47c0, fmt=0x7fffebfb0c2c) at libavcodec/pthread_frame.c:945
+#7  0x0000555555d0fb1e in get_format (s=0x555557a4d880, sps=0x555557acb940) at libavcodec/hevcdec.c:421
+#8  0x0000555555d10258 in hls_slice_header (s=0x555557a4d880) at libavcodec/hevcdec.c:529
+#9  0x0000555555d1aedf in decode_nal_unit (s=0x555557a4d880, nal=0x7fffe4011218) at libavcodec/hevcdec.c:2915
+#10 0x0000555555d1b5b6 in decode_nal_units (s=0x555557a4d880, buf=0x555557a84b10 "", length=22175) at libavcodec/hevcdec.c:3056
+#11 0x0000555555d1bbcd in hevc_decode_frame (avctx=0x555557ab47c0, data=0x555557ab4c80, got_output=0x555557ab9ba0, avpkt=0x555557ab9b40) at libavcodec/hevcdec.c:3192
+#12 0x0000555555f4ba23 in frame_worker_thread (arg=0x555557ab9a40) at libavcodec/pthread_frame.c:201
+#13 0x00007ffff38616db in start_thread (arg=0x7fffebfb1700) at pthread_create.c:463
+#14 0x00007ffff358a88f in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+(gdb) bt
+#0  av_hwframe_ctx_init (ref=0x7fffe401ac80) at libavutil/hwcontext.c:331
+#1  0x0000555555c19335 in ff_decode_get_hw_frames_ctx (avctx=0x555557ab47c0, dev_type=AV_HWDEVICE_TYPE_VAAPI) at libavcodec/decode.c:1192
+#2  0x00005555567773ea in ff_vaapi_decode_init (avctx=0x555557ab47c0) at libavcodec/vaapi_decode.c:659
+#3  0x0000555555c195c3 in hwaccel_init (avctx=0x555557ab47c0, hw_config=0x5555571d85b0 <__compound_literal.0>) at libavcodec/decode.c:1273
+#4  0x0000555555c19ac0 in ff_get_format (avctx=0x555557ab47c0, fmt=0x7fffebfb0c2c) at libavcodec/decode.c:1412
+#5  0x0000555555f4df9a in ff_thread_get_format (avctx=0x555557ab47c0, fmt=0x7fffebfb0c2c) at libavcodec/pthread_frame.c:945
+#6  0x0000555555d0fb1e in get_format (s=0x555557a4d880, sps=0x555557acb940) at libavcodec/hevcdec.c:421
+#7  0x0000555555d10258 in hls_slice_header (s=0x555557a4d880) at libavcodec/hevcdec.c:529
+#8  0x0000555555d1aedf in decode_nal_unit (s=0x555557a4d880, nal=0x7fffe4011218) at libavcodec/hevcdec.c:2915
+#9  0x0000555555d1b5b6 in decode_nal_units (s=0x555557a4d880, buf=0x555557a84b10 "", length=22175) at libavcodec/hevcdec.c:3056
+#10 0x0000555555d1bbcd in hevc_decode_frame (avctx=0x555557ab47c0, data=0x555557ab4c80, got_output=0x555557ab9ba0, avpkt=0x555557ab9b40) at libavcodec/hevcdec.c:3192
+#11 0x0000555555f4ba23 in frame_worker_thread (arg=0x555557ab9a40) at libavcodec/pthread_frame.c:201
+#12 0x00007ffff38616db in start_thread (arg=0x7fffebfb1700) at pthread_create.c:463
+#13 0x00007ffff358a88f in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+hls_slice_header
+
+Number 2:
+(gdb) bt
+#0  av_hwframe_ctx_alloc (device_ref_in=0x555557ab3200) at libavutil/hwcontext.c:244
+#1  0x0000555555c19412 in avcodec_get_hw_frames_parameters (avctx=0x555557adf600, device_ref=0x555557ab3200, hw_pix_fmt=AV_PIX_FMT_VAAPI_VLD, out_frames_ref=0x555557adf9f0)
+    at libavcodec/decode.c:1223
+#2  0x0000555555c192e5 in ff_decode_get_hw_frames_ctx (avctx=0x555557adf600, dev_type=AV_HWDEVICE_TYPE_VAAPI) at libavcodec/decode.c:1176
+#3  0x00005555567773ea in ff_vaapi_decode_init (avctx=0x555557adf600) at libavcodec/vaapi_decode.c:659
+#4  0x0000555555c195c3 in hwaccel_init (avctx=0x555557adf600, hw_config=0x5555571d85b0 <__compound_literal.0>) at libavcodec/decode.c:1273
+#5  0x0000555555c19ac0 in ff_get_format (avctx=0x555557adf600, fmt=0x7fffeafaec2c) at libavcodec/decode.c:1412
+#6  0x0000555555f4df9a in ff_thread_get_format (avctx=0x555557adf600, fmt=0x7fffeafaec2c) at libavcodec/pthread_frame.c:945
+#7  0x0000555555d0fb1e in get_format (s=0x555557d08500, sps=0x7fffe0030e00) at libavcodec/hevcdec.c:421
+#8  0x0000555555d10258 in hls_slice_header (s=0x555557d08500) at libavcodec/hevcdec.c:529
+#9  0x0000555555d1aedf in decode_nal_unit (s=0x555557d08500, nal=0x7fffe001b758) at libavcodec/hevcdec.c:2915
+#10 0x0000555555d1b5b6 in decode_nal_units (s=0x555557d08500, buf=0x555557a7e740 "", length=21657) at libavcodec/hevcdec.c:3056
+#11 0x0000555555d1bbcd in hevc_decode_frame (avctx=0x555557adf600, data=0x555557ac92c0, got_output=0x555557ab9f00, avpkt=0x555557ab9ea0) at libavcodec/hevcdec.c:3192
+#12 0x0000555555f4ba23 in frame_worker_thread (arg=0x555557ab9da0) at libavcodec/pthread_frame.c:201
+#13 0x00007ffff38616db in start_thread (arg=0x7fffeafaf700) at pthread_create.c:463
+#14 0x00007ffff358a88f in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+
+(gdb) bt
+#0  av_hwframe_ctx_init (ref=0x7fffe000fc80) at libavutil/hwcontext.c:331
+#1  0x0000555555c19335 in ff_decode_get_hw_frames_ctx (avctx=0x555557adf600, dev_type=AV_HWDEVICE_TYPE_VAAPI) at libavcodec/decode.c:1192
+#2  0x00005555567773ea in ff_vaapi_decode_init (avctx=0x555557adf600) at libavcodec/vaapi_decode.c:659
+#3  0x0000555555c195c3 in hwaccel_init (avctx=0x555557adf600, hw_config=0x5555571d85b0 <__compound_literal.0>) at libavcodec/decode.c:1273
+#4  0x0000555555c19ac0 in ff_get_format (avctx=0x555557adf600, fmt=0x7fffeafaec2c) at libavcodec/decode.c:1412
+#5  0x0000555555f4df9a in ff_thread_get_format (avctx=0x555557adf600, fmt=0x7fffeafaec2c) at libavcodec/pthread_frame.c:945
+#6  0x0000555555d0fb1e in get_format (s=0x555557d08500, sps=0x7fffe0030e00) at libavcodec/hevcdec.c:421
+#7  0x0000555555d10258 in hls_slice_header (s=0x555557d08500) at libavcodec/hevcdec.c:529
+#8  0x0000555555d1aedf in decode_nal_unit (s=0x555557d08500, nal=0x7fffe001b758) at libavcodec/hevcdec.c:2915
+#9  0x0000555555d1b5b6 in decode_nal_units (s=0x555557d08500, buf=0x555557a7e740 "", length=21657) at libavcodec/hevcdec.c:3056
+#10 0x0000555555d1bbcd in hevc_decode_frame (avctx=0x555557adf600, data=0x555557ac92c0, got_output=0x555557ab9f00, avpkt=0x555557ab9ea0) at libavcodec/hevcdec.c:3192
+#11 0x0000555555f4ba23 in frame_worker_thread (arg=0x555557ab9da0) at libavcodec/pthread_frame.c:201
+#12 0x00007ffff38616db in start_thread (arg=0x7fffeafaf700) at pthread_create.c:463
+#13 0x00007ffff358a88f in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
 
 ./ffmpeg_g -threads 1 -thread_type slice+frame -hwaccel vaapi  -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i  ../../../Videos/Allegro_HEVC_Main_HT50_INTRA_07_192x200@60Hz_3.1.bin -f null /dev/null -loglevel 99 -report
+
+
+cbs_h2645_assemble_fragment() // start code
