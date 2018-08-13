@@ -183,3 +183,15 @@ EOF
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ECDCAD72428D7C01
 sudo apt-get update
 sudo apt-get install linux-image-$(uname -r)-dbgsym
+
+
+#0  write_packet (of=0x555557a38240, pkt=0x7fffffffcf60, ost=0x555557a91600, unqueue=0) at fftools/ffmpeg.c:717
+#1  0x0000555555660da0 in output_packet (of=0x555557a38240, pkt=0x7fffffffcf60, ost=0x555557a91600, eof=0) at fftools/ffmpeg.c:886
+#2  0x0000555555666552 in do_streamcopy (ist=0x555557a38300, ost=0x555557a91600, pkt=0x7fffffffd2c0) at fftools/ffmpeg.c:2080
+#3  0x00005555556690c5 in process_input_packet (ist=0x555557a38300, pkt=0x7fffffffd2c0, no_eof=0) at fftools/ffmpeg.c:2746
+#4  0x00005555556701df in process_input (file_index=0) at fftools/ffmpeg.c:4505
+#5  0x000055555567079e in transcode_step () at fftools/ffmpeg.c:4625
+#6  0x000055555567091b in transcode () at fftools/ffmpeg.c:4679
+#7  0x00005555556712eb in main (argc=13, argv=0x7fffffffdc28) at fftools/ffmpeg.c:4886
+
+https://www.freedesktop.org/wiki/Software/PulseAudio/HowToUseGitSendEmail/  // git send patch
