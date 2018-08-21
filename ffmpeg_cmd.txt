@@ -195,3 +195,5 @@ sudo apt-get install linux-image-$(uname -r)-dbgsym
 #7  0x00005555556712eb in main (argc=13, argv=0x7fffffffdc28) at fftools/ffmpeg.c:4886
 
 https://www.freedesktop.org/wiki/Software/PulseAudio/HowToUseGitSendEmail/  // git send patch
+
+./ffmpeg -i ../../../Videos/skyfall2-trailer.mp4 -c copy -listen 1  -movflags frag_keyframe+empty_moov -f mp4 http://192.168.100.209:8999 
