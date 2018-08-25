@@ -196,4 +196,7 @@ sudo apt-get install linux-image-$(uname -r)-dbgsym
 
 https://www.freedesktop.org/wiki/Software/PulseAudio/HowToUseGitSendEmail/  // git send patch
 
-./ffmpeg -i ../../../Videos/skyfall2-trailer.mp4 -c copy -listen 1  -movflags frag_keyframe+empty_moov -f mp4 http://192.168.100.209:8999 
+./ffmpeg -i ../../../Videos/skyfall2-trailer.mp4 -c copy -listen 1  -movflags frag_keyframe+empty_moov -f mp4 http://192.168.100.209:8999
+
+./ffmpeg -re -i ~/Downloads/ToS-4k-1920.mov -vcodec libx264 -g 50 -refs 1 -s 640x360 -b:v 1000k -acodec aac -b:a 64k -flush_packets 0 -f mpegts "srt://127.0.0.1:5555?mode=listener"
+ffplay srt://127.0.0.1:5555
