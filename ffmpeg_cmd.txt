@@ -200,3 +200,7 @@ https://www.freedesktop.org/wiki/Software/PulseAudio/HowToUseGitSendEmail/  // g
 
 ./ffmpeg -re -i ~/Downloads/ToS-4k-1920.mov -vcodec libx264 -g 50 -refs 1 -s 640x360 -b:v 1000k -acodec aac -b:a 64k -flush_packets 0 -f mpegts "srt://127.0.0.1:5555?mode=listener"
 ffplay srt://127.0.0.1:5555
+
+
+./ffmpeg_g -v 55 -y -threads 1 -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i ~/video/test/bbb_1080_264.mp4 -an -c:v h264_vaapi -slices 2 -frames:v 1 test.264
+./ffmpeg -i test.264 out.mjpeg
