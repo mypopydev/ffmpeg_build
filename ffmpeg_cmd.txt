@@ -207,3 +207,63 @@ ffplay srt://127.0.0.1:5555
 
 1. static void dump_sidedata(void *ctx, AVStream *st, const char *indent)
 2. const char *av_frame_side_data_name(enum AVFrameSideDataType type)
+
+
+1. ./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i ../../../Videos/skyfall2-trailer.mp4 -f null /dev/null
+   ./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -i ../../../Videos/skyfall2-trailer.mp4 -f null /dev/null
+
+
+(gdb) bt
+DdiMedia_MediaFormatToOsFormat   // (gdb) p buf->format $48 = Media_Format_CPU
+#0  DdiMedia_MapBufferInternal (ctx=0x555557a9a2a0, buf_id=0, pbuf=0x7fffffffca48, flag=3)
+    at /home/barry/Sources/umd_dev/media-driver/media_driver/linux/common/ddi/media_libva.cpp:2818
+#1  0x00007fffeb1337aa in DdiMedia_MapBuffer (ctx=0x555557a9a2a0, buf_id=0, pbuf=0x7fffffffca48)
+    at /home/barry/Sources/umd_dev/media-driver/media_driver/linux/common/ddi/media_libva.cpp:2846
+#2  0x00007fffeb1390ac in DdiMedia_GetImage (ctx=0x555557a9a2a0, surface=24, x=0, y=0, width=1920, height=1088, image=0)
+    at /home/barry/Sources/umd_dev/media-driver/media_driver/linux/common/ddi/media_libva.cpp:4408
+#3  0x0000555556a864ca in vaapi_map_frame (hwfc=0x7fffe0052100, dst=0x555557f01e00, src=0x555557bf4d00, flags=1) at libavutil/hwcontext_vaapi.c:784
+#4  0x0000555556a8678e in vaapi_transfer_data_from (hwfc=0x7fffe0052100, dst=0x555557a9b900, src=0x555557bf4d00) at libavutil/hwcontext_vaapi.c:852
+#5  0x0000555556a7feb5 in av_hwframe_transfer_data (dst=0x555557a9b900, src=0x555557bf4d00, flags=0) at libavutil/hwcontext.c:450
+#6  0x0000555556a7fdcb in transfer_data_alloc (dst=0x555557a9b680, src=0x555557bf4d00, flags=0) at libavutil/hwcontext.c:425
+#7  0x0000555556a7fe6a in av_hwframe_transfer_data (dst=0x555557a9b680, src=0x555557bf4d00, flags=0) at libavutil/hwcontext.c:445
+#8  0x000055555565b82c in hwaccel_retrieve_data (avctx=0x555557a98380, input=0x555557bf4d00) at fftools/ffmpeg_hw.c:448
+#9  0x000055555566c18f in decode_video (ist=0x555557a98dc0, pkt=0x7fffffffcec0, got_output=0x7fffffffcea8, duration_pts=0x7fffffffceb8, eof=0, decode_failed=0x7fffffffceb0)
+    at fftools/ffmpeg.c:2430
+#10 0x000055555566cf9d in process_input_packet (ist=0x555557a98dc0, pkt=0x7fffffffd100, no_eof=0) at fftools/ffmpeg.c:2625
+#11 0x000055555567498e in process_input (file_index=0) at fftools/ffmpeg.c:4507
+#12 0x0000555555674f4d in transcode_step () at fftools/ffmpeg.c:4627
+#13 0x00005555556750ca in transcode () at fftools/ffmpeg.c:4681
+#14 0x0000555555675a9a in main (argc=15, argv=0x7fffffffda68) at fftools/ffmpeg.c:4888
+
+DdiMedia_CreateImage //   buf->format            = Media_Format_CPU;//DdiCodec_OsFormatToMediaFormat(vaimg->format.fourcc); //Media_Format_Buffer;
+a9a07fc9 lead to the issue
+
+
+在前10秒应显示底帧:
+
+blend=all_expr='A*(if(gte(T,10),1,T/10))+B*(1-(if(gte(T,10),1,T/10)))'
+
+显示1x1棋盘效应效果（有的显示A，有的显示B）:
+
+blend=all_expr='if(eq(mod(X,2),mod(Y,2)),A,B)'
+
+从左到右揭开的效果:
+
+blend=all_expr='if(gte(N*SW+X,W),A,B)'
+
+从上到下揭开效果:
+
+blend=all_expr='if(gte(Y-N*SH,0),A,B)'
+
+从右下向左上揭开效果：
+
+blend=all_expr='if(gte(TSH40+Y,H)gte((T40*SW+X)*W/H,W),A,B)'
+
+显示当前和前一帧之间的差异:
+
+tblend=all_mode=difference128
+
+使用举例：
+
+ffmpeg -i out31.avi -i out32.avi -filter_complex "blend=all_expr='if(gte(T*SH*200+Y,H)*gte((T*200*SW+X)
+
