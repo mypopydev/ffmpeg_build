@@ -452,3 +452,65 @@ $47 = {0xa0, 0xa0, 0x8f, 0x83, 0x78, 0x6d, 0x61, 0x61}
         ::"memory",
         "cc", "eax", "xmm0", "xmm1", "xmm2", "xmm5", "xmm6", "xmm7");
 }
+
+
+// global blend 32 pixels at a time. width = n * 32 (n >=1)
+// dst[i] = ((src0[i]*alpah[0])+(src1[i]*(255-alpha[0]))+255)/256
+static void ff_global_blend_row_avx2(const uint8_t *src0,
+                                     const uint8_t *src1,
+                                     const uint8_t *alpha,
+                                     uint8_t *dst,
+                                     int width)
+{
+  __asm__ volatile(
+      "vpcmpeqb   %%ymm5,%%ymm5,%%ymm5           \n"
+      "vpsllw     $0x8,%%ymm5,%%ymm5             \n"
+      "mov        $0x80808080,%%eax              \n" 
+      "vmovd      %%eax,%%xmm6                   \n" xmm6 = 
+      "vbroadcastss %%xmm6,%%ymm6                \n" xmm6 = v32_int8 = {0x80 <repeats 32 times>}
+      "mov        $0x807f807f,%%eax              \n"
+      "vmovd      %%eax,%%xmm7                   \n"
+      "vbroadcastss %%xmm7,%%ymm7                \n"
+      //"sub        %2,%0                          \n"
+      //"sub        %2,%1                          \n"
+      //"sub        %2,%3                          \n"
+
+      // 32 pixel per loop.
+      "1:                                        \n"
+      "vmovdqu    (%2),%%ymm0                    \n" // Move unaligned packed integer values from ymm2/m256 to ymm1.
+                                                     // v32_int8 = {0x55 <repeats 32 times>}, v16_int16 = {0x5555 <repeats 16 times>} load 32 byte
+      "vpunpckhbw %%ymm0,%%ymm0,%%ymm3           \n"
+      "vpunpcklbw %%ymm0,%%ymm0,%%ymm0           \n"
+      "vpxor      %%ymm5,%%ymm3,%%ymm3           \n"
+      "vpxor      %%ymm5,%%ymm0,%%ymm0           \n"
+
+      "vmovdqu    (%0),%%ymm1                    \n"
+      "vmovdqu    (%1),%%ymm2                    \n"
+      "vpunpckhbw %%ymm2,%%ymm1,%%ymm4           \n"
+      "vpunpcklbw %%ymm2,%%ymm1,%%ymm1           \n"
+      "vpsubb     %%ymm6,%%ymm4,%%ymm4           \n"
+      "vpsubb     %%ymm6,%%ymm1,%%ymm1           \n"
+      "vpmaddubsw %%ymm4,%%ymm3,%%ymm3           \n"
+      "vpmaddubsw %%ymm1,%%ymm0,%%ymm0           \n"
+      "vpaddw     %%ymm7,%%ymm3,%%ymm3           \n"
+      "vpaddw     %%ymm7,%%ymm0,%%ymm0           \n"
+      "vpsrlw     $0x8,%%ymm3,%%ymm3             \n"
+      "vpsrlw     $0x8,%%ymm0,%%ymm0             \n"
+      "vpackuswb  %%ymm3,%%ymm0,%%ymm0           \n"
+
+      "vmovdqu    %%ymm0,(%3)                    \n"
+      "lea        0x20(%0),%0                    \n"
+      "lea        0x20(%1),%1                    \n"
+      "lea        0x20(%3),%3                    \n"
+      "sub        $0x20,%4                       \n"
+      "jg        1b                              \n"
+      "vzeroupper                                \n"
+      : "+r"(src0),   // %0
+        "+r"(src1),   // %1
+        "+r"(alpha),  // %2
+        "+r"(dst),    // %3
+        "+rm"(width)  // %4
+        ::"memory",
+        "cc", "eax", "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6",
+         "xmm7", "xmm8");
+}
