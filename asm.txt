@@ -1,0 +1,25 @@
+1. GPR
+
+2. Ins type
+
+• Data transfer
+• Data comparison
+• Data conversion
+• Binary arithmetic
+• Logical
+• Rotate and shift
+• Byte set and bit strings
+• String
+• Flags
+• Control transfer
+• Miscellaneous
+
+3. Function prologs and epilogs
+
+4. Debug 
+
+4.1 Show current assembly instruction in GDB
+a). layout asm
+b). set  disassemble-next-line on
+    show disassemble-next-line
+c). display/i $pc
