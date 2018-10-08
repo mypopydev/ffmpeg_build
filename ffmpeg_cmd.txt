@@ -514,3 +514,46 @@ static void ff_global_blend_row_avx2(const uint8_t *src0,
         "cc", "eax", "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6",
          "xmm7", "xmm8");
 }
+
+int  ff_pixelutils_sad16_NxM_mmxext( uint16_t *src1, intptr_t, uint16_t *src2, intptr_t )
+
+0000000000000c60 <ff_pixelutils_sad16_16x16_mmxext>:
+     c60:       0f ef c0                pxor   %mm0,%mm0
+     c63:       41 b8 10 00 00 00       mov    $0x10,%r8d
+     
+     c69:       0f 6f 0f                movq   (%rdi),%mm1
+     c6c:       0f 6f 57 08             movq   0x8(%rdi),%mm2
+     c70:       0f 6f 5f 10             movq   0x10(%rdi),%mm3
+     c74:       0f 6f 67 18             movq   0x18(%rdi),%mm4
+     c78:       0f f9 0a                psubw  (%rdx),%mm1
+     c7b:       0f f9 52 08             psubw  0x8(%rdx),%mm2
+     c7f:       0f f9 5a 10             psubw  0x10(%rdx),%mm3
+     c83:       0f f9 62 18             psubw  0x18(%rdx),%mm4
+     c87:       0f ef ed                pxor   %mm5,%mm5
+     c8a:       0f ef f6                pxor   %mm6,%mm6
+     c8d:       0f f9 e9                psubw  %mm1,%mm5
+     c90:       0f f9 f2                psubw  %mm2,%mm6
+     c93:       0f ee cd                pmaxsw %mm5,%mm1
+     c96:       0f ee d6                pmaxsw %mm6,%mm2
+     c99:       0f ef ff                pxor   %mm7,%mm7
+     c9c:       0f ef ed                pxor   %mm5,%mm5
+     c9f:       0f f9 fb                psubw  %mm3,%mm7
+     ca2:       0f f9 ec                psubw  %mm4,%mm5
+     ca5:       0f ee df                pmaxsw %mm7,%mm3
+     ca8:       0f ee e5                pmaxsw %mm5,%mm4
+     cab:       48 8d 3c 77             lea    (%rdi,%rsi,2),%rdi
+     caf:       48 8d 14 4a             lea    (%rdx,%rcx,2),%rdx
+     cb3:       0f fd ca                paddw  %mm2,%mm1
+     cb6:       0f fd dc                paddw  %mm4,%mm3
+     cb9:       0f fd c1                paddw  %mm1,%mm0
+     cbc:       0f fd c3                paddw  %mm3,%mm0
+     cbf:       41 ff c8                dec    %r8d
+     cc2:       7f a5                   jg     c69 <ff_pixelutils_sad16_16x16_mmxext+0x9>
+     cc4:       0f 6f c8                movq   %mm0,%mm1
+     cc7:       0f 72 d1 10             psrld  $0x10,%mm1
+     ccb:       0f 72 f0 10             pslld  $0x10,%mm0
+     ccf:       0f 72 d0 10             psrld  $0x10,%mm0
+     cd3:       0f fe c1                paddd  %mm1,%mm0
+     cd6:       0f 70 c8 0e             pshufw $0xe,%mm0,%mm1
+     cda:       0f fe c1                paddd  %mm1,%mm0
+     cdd:       0f 7e c0                movd   %mm0,%eax
