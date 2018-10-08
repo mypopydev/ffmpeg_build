@@ -1,0 +1,9 @@
+1. summary
+
+nasm -f <format> <filename> [-o <output>]
+
+nasm -hf // show format
+
+2.
+
+3.
