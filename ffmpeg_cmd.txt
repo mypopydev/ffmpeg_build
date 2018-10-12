@@ -557,3 +557,9 @@ int  ff_pixelutils_sad16_NxM_mmxext( uint16_t *src1, intptr_t, uint16_t *src2, i
      cd6:       0f 70 c8 0e             pshufw $0xe,%mm0,%mm1
      cda:       0f fe c1                paddd  %mm1,%mm0
      cdd:       0f 7e c0                movd   %mm0,%eax
+
+
+barry@barry-HP-ENVY-Notebook:~/Videos$ md5sum SMM0005.rcv 
+39eb225dbfafacea3e3737deba789530  SMM0005.rcv
+barry@barry-HP-ENVY-Notebook:~/Videos$ md5sum SMM0015.rcv 
+78e45e50079e143e69f69d677c37ac3b  SMM0015.rcv
