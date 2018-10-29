@@ -28,6 +28,7 @@ AVC 30fps
 -an -vf "scale=1280:720" -f null /dev/null
 
 1:1 1080 -> 1280x720
+
 166fps
 
 162fps // abr_pipeline
@@ -37,6 +38,7 @@ AVC 30fps
 -an -vf "scale=960:540" -f null /dev/null
 
 1:2 1080->1280x720/960x540/768x432
+
 132fps
 
       80202.922018      task-clock (msec)         #    2.930 CPUs utilized          
@@ -78,6 +80,7 @@ AVC 30fps
 -an -vf "scale=768:432" -f null /dev/null
 
 1:3 1080->1280x720/960x540/768x432
+
 100fps
 
       85660.464386      task-clock (msec)         #    2.368 CPUs utilized          
@@ -120,6 +123,7 @@ AVC 30fps
 -an -vf "scale=640:360" -f null /dev/null
 
 1:4 1080->1280x720/960x540/768x432/640x360
+
 85fps
 
       89944.833579      task-clock (msec)         #    2.104 CPUs utilized          
@@ -164,6 +168,7 @@ AVC 30fps
 -an -vf "scale=416:234" -f null /dev/null 
 
 1:5 1080->1280x720/960x540/768x432/640x360/416x234
+
 76fps
 
       93506.927204      task-clock (msec)         #    1.953 CPUs utilized          
@@ -198,4 +203,229 @@ AVC 30fps
 
     39.401580730 seconds time elapsed
 
-2. ARB 1:N case without encoder/audio (HW case)
+2. ARB 1:N case without encoder/audio (HW case) without dump data to CPU
+
+./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i ~/Videos/skyfall2-trailer.mp4 -an -f null /dev/null
+
+916fps
+
+     3636.058905      task-clock (msec)         #    0.906 CPUs utilized          
+            12,155      context-switches          #    0.003 M/sec                  
+             4,435      cpu-migrations            #    0.001 M/sec                  
+             8,797      page-faults               #    0.002 M/sec                  
+     4,438,200,566      cycles                    #    1.221 GHz                      (49.25%)
+     3,967,531,177      instructions              #    0.89  insn per cycle           (63.11%)
+       467,645,141      branches                  #  128.613 M/sec                    (61.79%)
+        17,221,780      branch-misses             #    3.68% of all branches          (61.44%)
+     1,332,266,931      L1-dcache-loads           #  366.404 M/sec                    (62.39%)
+        68,278,904      L1-dcache-load-misses     #    5.13% of all L1-dcache hits    (63.99%)
+        21,277,205      LLC-loads                 #    5.852 M/sec                    (50.91%)
+        13,138,487      LLC-load-misses           #   61.75% of all LL-cache hits     (50.23%)
+
+       4.013429194 seconds time elapsed
+
+
+./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i /home/barry/Videos/skyfall2-trailer.mp4 \
+-an -vf scale_vaapi=1280:720 -f null /dev/null
+
+1:1 1080 -> 1280x720
+
+773fps
+
+       5193.385108      task-clock (msec)         #    1.094 CPUs utilized          
+            13,099      context-switches          #    0.003 M/sec                  
+               568      cpu-migrations            #    0.109 K/sec                  
+             9,572      page-faults               #    0.002 M/sec                  
+     6,348,771,055      cycles                    #    1.222 GHz                      (49.24%)
+     4,305,994,300      instructions              #    0.68  insn per cycle           (61.57%)
+       537,405,993      branches                  #  103.479 M/sec                    (62.35%)
+        15,880,550      branch-misses             #    2.96% of all branches          (63.02%)
+     1,431,637,971      L1-dcache-loads           #  275.666 M/sec                    (63.28%)
+        77,478,511      L1-dcache-load-misses     #    5.41% of all L1-dcache hits    (62.61%)
+        24,427,835      LLC-loads                 #    4.704 M/sec                    (49.91%)
+        15,851,977      LLC-load-misses           #   64.89% of all LL-cache hits     (49.59%)
+
+       4.748609178 seconds time elapsed
+
+735fps // abr_pipeline
+
+       5811.185151      task-clock (msec)         #    1.162 CPUs utilized          
+            33,280      context-switches          #    0.006 M/sec                  
+             2,607      cpu-migrations            #    0.449 K/sec                  
+             9,409      page-faults               #    0.002 M/sec                  
+     6,292,136,204      cycles                    #    1.083 GHz                      (49.56%)
+     4,413,662,648      instructions              #    0.70  insn per cycle           (61.89%)
+       555,045,187      branches                  #   95.513 M/sec                    (62.28%)
+        18,656,081      branch-misses             #    3.36% of all branches          (62.36%)
+     1,463,980,964      L1-dcache-loads           #  251.925 M/sec                    (63.03%)
+        88,800,234      L1-dcache-load-misses     #    6.07% of all L1-dcache hits    (62.99%)
+        29,262,899      LLC-loads                 #    5.036 M/sec                    (49.58%)
+        16,473,581      LLC-load-misses           #   56.30% of all LL-cache hits     (50.19%)
+
+       5.001808275 seconds time elapsed
+       
+./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i /home/barry/Videos/skyfall2-trailer.mp4 \
+-an -vf scale_vaapi=1280:720  -f null /dev/null \
+-an -vf scale_vaapi=960:540 -f null /dev/null
+
+1:2 1080->1280x720/960x540
+
+684fps
+
+       6556.481818      task-clock (msec)         #    1.218 CPUs utilized          
+            24,917      context-switches          #    0.004 M/sec                  
+               658      cpu-migrations            #    0.100 K/sec                  
+             9,239      page-faults               #    0.001 M/sec                  
+     7,306,619,337      cycles                    #    1.114 GHz                      (49.27%)
+     3,707,818,389      instructions              #    0.51  insn per cycle           (61.25%)
+       533,304,007      branches                  #   81.340 M/sec                    (61.91%)
+        14,776,698      branch-misses             #    2.77% of all branches          (62.05%)
+     1,213,075,955      L1-dcache-loads           #  185.019 M/sec                    (63.70%)
+        74,837,733      L1-dcache-load-misses     #    6.17% of all L1-dcache hits    (62.99%)
+        26,246,371      LLC-loads                 #    4.003 M/sec                    (50.47%)
+        18,427,608      LLC-load-misses           #   70.21% of all LL-cache hits     (49.60%)
+
+       5.383101078 seconds time elapsed
+
+663fps // abr_pipeline
+
+      8264.896004      task-clock (msec)         #    1.466 CPUs utilized          
+            63,461      context-switches          #    0.008 M/sec                  
+             4,670      cpu-migrations            #    0.565 K/sec                  
+             9,164      page-faults               #    0.001 M/sec                  
+     7,846,365,563      cycles                    #    0.949 GHz                      (49.87%)
+     3,977,590,301      instructions              #    0.51  insn per cycle           (62.11%)
+       588,275,719      branches                  #   71.178 M/sec                    (61.68%)
+        18,995,349      branch-misses             #    3.23% of all branches          (61.53%)
+     1,264,497,949      L1-dcache-loads           #  152.996 M/sec                    (61.48%)
+        89,087,719      L1-dcache-load-misses     #    7.05% of all L1-dcache hits    (64.04%)
+        31,794,246      LLC-loads                 #    3.847 M/sec                    (50.41%)
+        20,694,248      LLC-load-misses           #   65.09% of all LL-cache hits     (51.00%)
+
+       5.636164680 seconds time elapsed
+
+./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i /home/barry/Videos/skyfall2-trailer.mp4 \
+-an -vf scale_vaapi=1280:720  -f null /dev/null \
+-an -vf scale_vaapi=960:540 -f null /dev/null   \
+-an -vf scale_vaapi=768:432 -f null /dev/null
+
+1:3 1080->1280x720/960x540/768x432
+
+637fps
+
+      6395.913938      task-clock (msec)         #    1.109 CPUs utilized          
+            34,281      context-switches          #    0.005 M/sec                  
+               551      cpu-migrations            #    0.086 K/sec                  
+             9,187      page-faults               #    0.001 M/sec                  
+    10,386,167,525      cycles                    #    1.624 GHz                      (49.77%)
+     4,177,739,534      instructions              #    0.40  insn per cycle           (62.03%)
+       635,211,498      branches                  #   99.315 M/sec                    (61.70%)
+        15,858,424      branch-misses             #    2.50% of all branches          (61.75%)
+     1,366,519,335      L1-dcache-loads           #  213.655 M/sec                    (61.61%)
+        86,005,635      L1-dcache-load-misses     #    6.29% of all L1-dcache hits    (63.21%)
+        30,500,828      LLC-loads                 #    4.769 M/sec                    (51.48%)
+        21,698,557      LLC-load-misses           #   71.14% of all LL-cache hits     (50.47%)
+
+       5.769639085 seconds time elapsed
+
+537fps // abr_pipeline
+
+      10732.606147      task-clock (msec)         #    1.582 CPUs utilized          
+           116,860      context-switches          #    0.011 M/sec                  
+             9,771      cpu-migrations            #    0.910 K/sec                  
+             9,222      page-faults               #    0.859 K/sec                  
+    11,137,076,540      cycles                    #    1.038 GHz                      (50.32%)
+     4,777,821,883      instructions              #    0.43  insn per cycle           (62.78%)
+       736,480,608      branches                  #   68.621 M/sec                    (62.20%)
+        23,558,523      branch-misses             #    3.20% of all branches          (62.15%)
+     1,515,470,513      L1-dcache-loads           #  141.202 M/sec                    (62.16%)
+       119,838,193      L1-dcache-load-misses     #    7.91% of all L1-dcache hits    (62.55%)
+        42,208,736      LLC-loads                 #    3.933 M/sec                    (50.48%)
+        24,748,926      LLC-load-misses           #   58.63% of all LL-cache hits     (50.15%)
+
+       6.782936050 seconds time elapsed
+
+./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i /home/barry/Videos/skyfall2-trailer.mp4 \
+-an -vf scale_vaapi=1280:720  -f null /dev/null \
+-an -vf scale_vaapi=960:540 -f null /dev/null   \
+-an -vf scale_vaapi=768:432 -f null /dev/null   \
+-an -vf scale_vaapi=640:360 -f null /dev/null
+
+1:4 1080->1280x720/960x540/768x432/640x360/416x234
+
+610fps
+
+      6318.163965      task-clock (msec)         #    1.053 CPUs utilized          
+            42,061      context-switches          #    0.007 M/sec                  
+               483      cpu-migrations            #    0.076 K/sec                  
+             9,294      page-faults               #    0.001 M/sec                  
+    12,958,529,025      cycles                    #    2.051 GHz                      (49.88%)
+     4,667,798,273      instructions              #    0.36  insn per cycle           (62.71%)
+       730,988,769      branches                  #  115.696 M/sec                    (61.29%)
+        16,349,396      branch-misses             #    2.24% of all branches          (62.00%)
+     1,494,259,965      L1-dcache-loads           #  236.502 M/sec                    (63.01%)
+        92,754,790      L1-dcache-load-misses     #    6.21% of all L1-dcache hits    (63.31%)
+        33,672,711      LLC-loads                 #    5.330 M/sec                    (50.57%)
+        24,732,730      LLC-load-misses           #   73.45% of all LL-cache hits     (49.94%)
+
+       5.997480637 seconds time elapsed
+
+585fps // abr_pipeline
+
+      9542.099578      task-clock (msec)         #    1.521 CPUs utilized          
+           175,079      context-switches          #    0.018 M/sec                  
+            24,621      cpu-migrations            #    0.003 M/sec                  
+             9,334      page-faults               #    0.978 K/sec                  
+    18,665,619,322      cycles                    #    1.956 GHz                      (51.26%)
+     5,589,403,607      instructions              #    0.30  insn per cycle           (63.84%)
+       896,600,302      branches                  #   93.963 M/sec                    (63.27%)
+        28,061,306      branch-misses             #    3.13% of all branches          (62.57%)
+     1,751,007,103      L1-dcache-loads           #  183.503 M/sec                    (61.66%)
+       148,111,720      L1-dcache-load-misses     #    8.46% of all L1-dcache hits    (61.70%)
+        52,105,203      LLC-loads                 #    5.461 M/sec                    (49.22%)
+        29,980,581      LLC-load-misses           #   57.54% of all LL-cache hits     (50.33%)
+
+       6.273269238 seconds time elapsed
+
+./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i /home/barry/Videos/skyfall2-trailer.mp4 \
+-an -vf scale_vaapi=1280:720  -f null /dev/null \
+-an -vf scale_vaapi=960:540 -f null /dev/null   \
+-an -vf scale_vaapi=768:432 -f null /dev/null   \
+-an -vf scale_vaapi=640:360 -f null /dev/null   \
+-an -vf scale_vaapi=416:234 -f null /dev/null 
+
+1:5 1080->1280x720/960x540/768x432/640x360/416x234
+
+574fps
+
+       7431.372338      task-clock (msec)         #    1.160 CPUs utilized          
+            39,493      context-switches          #    0.005 M/sec                  
+               427      cpu-migrations            #    0.057 K/sec                  
+             9,322      page-faults               #    0.001 M/sec                  
+    15,102,581,951      cycles                    #    2.032 GHz                      (52.04%)
+     5,242,709,316      instructions              #    0.35  insn per cycle           (64.09%)
+       828,683,603      branches                  #  111.512 M/sec                    (62.68%)
+        18,738,075      branch-misses             #    2.26% of all branches          (61.49%)
+     1,597,577,926      L1-dcache-loads           #  214.978 M/sec                    (60.74%)
+       102,695,144      L1-dcache-load-misses     #    6.43% of all L1-dcache hits    (60.80%)
+        37,776,523      LLC-loads                 #    5.083 M/sec                    (50.99%)
+        28,182,605      LLC-load-misses           #   74.60% of all LL-cache hits     (51.26%)
+
+       6.405989916 seconds time elapsed
+
+540fps // abr_pipeline
+
+      11063.459722      task-clock (msec)         #    1.634 CPUs utilized          
+           230,430      context-switches          #    0.021 M/sec                  
+            42,200      cpu-migrations            #    0.004 M/sec                  
+             9,372      page-faults               #    0.847 K/sec                  
+    21,836,085,832      cycles                    #    1.974 GHz                      (50.18%)
+     6,439,245,953      instructions              #    0.29  insn per cycle           (62.56%)
+     1,063,915,555      branches                  #   96.165 M/sec                    (63.80%)
+        32,406,581      branch-misses             #    3.05% of all branches          (63.38%)
+     1,964,480,197      L1-dcache-loads           #  177.565 M/sec                    (62.35%)
+       168,790,470      L1-dcache-load-misses     #    8.59% of all L1-dcache hits    (62.45%)
+        60,443,701      LLC-loads                 #    5.463 M/sec                    (48.82%)
+        34,350,692      LLC-load-misses           #   56.83% of all LL-cache hits     (49.02%)
+
+       6.770979717 seconds time elapsed
