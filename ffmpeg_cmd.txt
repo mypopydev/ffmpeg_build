@@ -563,3 +563,6 @@ barry@barry-HP-ENVY-Notebook:~/Videos$ md5sum SMM0005.rcv
 39eb225dbfafacea3e3737deba789530  SMM0005.rcv
 barry@barry-HP-ENVY-Notebook:~/Videos$ md5sum SMM0015.rcv 
 78e45e50079e143e69f69d677c37ac3b  SMM0015.rcv
+
+
+av_image_fill_pointers
