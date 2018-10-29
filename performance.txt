@@ -163,7 +163,7 @@ AVC 30fps
 -an -vf "scale=640:360" -f null /dev/null  \
 -an -vf "scale=416:234" -f null /dev/null 
 
-1:4 1080->1280x720/960x540/768x432/640x360/416x234
+1:5 1080->1280x720/960x540/768x432/640x360/416x234
 76fps
 
       93506.927204      task-clock (msec)         #    1.953 CPUs utilized          
