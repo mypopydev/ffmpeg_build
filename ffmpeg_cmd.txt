@@ -566,3 +566,7 @@ barry@barry-HP-ENVY-Notebook:~/Videos$ md5sum SMM0015.rcv
 
 
 av_image_fill_pointers
+
+BSF debug encoder:
+
+LIBVA_DRIVER_NAME=iHD gdb --args ./ffmpeg_g -y -hwaccel vaapi -hwaccel_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i ~/Videos/skyfall2-trailer.mp4 -an -c:v h264_vaapi -frames:v 1 -slices 100 -low_power 1 -bsf:v trace_headers -f null -
