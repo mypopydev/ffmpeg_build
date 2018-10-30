@@ -37,7 +37,7 @@ AVC 30fps
 -an -vf "scale=1280:720" -f null /dev/null  \
 -an -vf "scale=960:540" -f null /dev/null
 
-1:2 1080->1280x720/960x540/768x432
+1:2 1080->1280x720/960x540
 
 132fps
 
@@ -351,7 +351,7 @@ AVC 30fps
 -an -vf scale_vaapi=768:432 -f null /dev/null   \
 -an -vf scale_vaapi=640:360 -f null /dev/null
 
-1:4 1080->1280x720/960x540/768x432/640x360/416x234
+1:4 1080->1280x720/960x540/768x432/640x360
 
 610fps
 
@@ -476,7 +476,7 @@ AVC 30fps
 -an -vf "scale_vaapi=1280:720:format=nv12,hwdownload" -pix_fmt nv12 -f null /dev/null \
 -an -vf "scale_vaapi=960:540:format=nv12,hwdownload" -pix_fmt nv12 -f null /dev/null
 
-1:2 1080->1280x720/960x540/768x432/640x360/416x234
+1:2 1080->1280x720/960x540
 
 353fps
 
