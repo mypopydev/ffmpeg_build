@@ -1035,9 +1035,27 @@ AVC 30fps
 
       13.239982444 seconds time elapsed
 
+223fps // i965
+
 ./ffmpeg -hwaccel vaapi -vaapi_device /dev/dri/renderD128 -hwaccel_output_format vaapi -i /home/barry/Videos/skyfall2-trailer.mp4 \
 -an -vf scale_vaapi=1280:720 -c:v h264_vaapi -f null /dev/null \
 -an -vf scale_vaapi=960:540 -c:v h264_vaapi -f null /dev/null
+
+      11312.631378      task-clock (msec)         #    0.693 CPUs utilized          
+            35,596      context-switches          #    0.003 M/sec                  
+               457      cpu-migrations            #    0.040 K/sec                  
+            10,968      page-faults               #    0.970 K/sec                  
+    15,931,358,157      cycles                    #    1.408 GHz                      (49.43%)
+     8,548,126,701      instructions              #    0.54  insn per cycle           (61.61%)
+     1,495,458,154      branches                  #  132.194 M/sec                    (60.91%)
+        37,794,298      branch-misses             #    2.53% of all branches          (60.96%)
+     2,525,348,333      L1-dcache-loads           #  223.233 M/sec                    (62.42%)
+       253,443,881      L1-dcache-load-misses     #   10.04% of all L1-dcache hits    (63.60%)
+        53,699,495      LLC-loads                 #    4.747 M/sec                    (51.52%)
+        36,498,914      LLC-load-misses           #   67.97% of all LL-cache hits     (51.15%)
+
+      16.323786332 seconds time elapsed
+
 
 1:2 1080->1080/720/540
 
