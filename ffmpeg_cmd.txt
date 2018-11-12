@@ -573,3 +573,5 @@ LIBVA_DRIVER_NAME=iHD gdb --args ./ffmpeg_g -y -hwaccel vaapi -hwaccel_device /d
 
 
 sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
+
+ ./configure --enable-libx264 --enable-libx265 --enable-gpl --enable-libwebp --disable-optimizations --samples=../fate-suite --enable-openssl --enable-nonfree --enable-libzmq --enable-libkvazaar --enable-libvpx --enable-libvorbis --enable-libsrt --enable-libmfx
