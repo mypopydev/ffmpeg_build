@@ -578,3 +578,33 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
 
 
 027f032bbce9bdf7bbec40665b98590cade33416 // make fate-copy-trac3074
+
+// Samples
+{channelId = 0, activeChannelCount = 1, useRoundRobinThreadAssignment = 0 '\000', intraPeriodLength = -2, intraRefreshType = 1, predStructure = 2 '\002', 
+  baseLayerSwitchMode = 0, encMode = 9 '\t', hierarchicalLevels = 3, sourceWidth = 1920, sourceHeight = 1080, latencyMode = 0 '\000', interlacedVideo = 0 '\000', qp = 32, 
+  useQpFile = 0 '\000', disableDlfFlag = 0 '\000', enableSaoFlag = 1 '\001', useDefaultMeHme = 1 '\001', enableHmeFlag = 1 '\001', enableHmeLevel0Flag = 1 '\001', 
+  enableHmeLevel1Flag = 0 '\000', enableHmeLevel2Flag = 0 '\000', searchAreaWidth = 16, searchAreaHeight = 7, numberHmeSearchRegionInWidth = 2, numberHmeSearchRegionInHeight = 2, 
+  hmeLevel0TotalSearchAreaWidth = 64, hmeLevel0TotalSearchAreaHeight = 25, hmeLevel0SearchAreaInWidthArray = {32, 32}, hmeLevel0SearchAreaInHeightArray = {12, 13}, 
+  hmeLevel1SearchAreaInWidthArray = {1, 1}, hmeLevel1SearchAreaInHeightArray = {1, 1}, hmeLevel2SearchAreaInWidthArray = {1, 1}, hmeLevel2SearchAreaInHeightArray = {1, 1}, 
+  constrainedIntra = 0 '\000', frameRate = 60, frameRateNumerator = 0, frameRateDenominator = 0, encoderBitDepth = 8, compressedTenBitFormat = 0, rateControlMode = 0, 
+  sceneChangeDetection = 1, lookAheadDistance = 17, framesToBeEncoded = 0, targetBitRate = 7000000, maxQpAllowed = 48, minQpAllowed = 10, tune = 0 '\000', 
+  bitRateReduction = 1 '\001', improveSharpness = 1 '\001', videoUsabilityInfo = 0, highDynamicRangeInput = 0, accessUnitDelimiter = 0, bufferingPeriodSEI = 0, pictureTimingSEI = 0, 
+  registeredUserDataSeiFlag = 0, unregisteredUserDataSeiFlag = 0, recoveryPointSeiFlag = 0, enableTemporalId = 1, profile = 2, tier = 0, level = 0, 
+  inputOutputBufferFifoInitCount = 50, injectorFrameRate = 3932160, speedControlFlag = 0, asmType = ASM_AVX2, codeVpsSpsPps = 0 '\000'}
+
+
+// FFmpeg SVT-HEVC
+{channelId = 0, activeChannelCount = 1, useRoundRobinThreadAssignment = 0 '\000', intraPeriodLength = -2, intraRefreshType = 1, predStructure = 2 '\002', 
+  baseLayerSwitchMode = 0, encMode = 9 '\t', hierarchicalLevels = 3, sourceWidth = 0, sourceHeight = 0, latencyMode = 0 '\000', interlacedVideo = 0 '\000', qp = 32, 
+  useQpFile = 0 '\000', disableDlfFlag = 0 '\000', enableSaoFlag = 1 '\001', useDefaultMeHme = 1 '\001', enableHmeFlag = 1 '\001', enableHmeLevel0Flag = 1 '\001', 
+  enableHmeLevel1Flag = 0 '\000', enableHmeLevel2Flag = 0 '\000', searchAreaWidth = 16, searchAreaHeight = 7, numberHmeSearchRegionInWidth = 2, numberHmeSearchRegionInHeight = 2, 
+  hmeLevel0TotalSearchAreaWidth = 64, hmeLevel0TotalSearchAreaHeight = 25, hmeLevel0SearchAreaInWidthArray = {32, 32}, hmeLevel0SearchAreaInHeightArray = {12, 13}, 
+  hmeLevel1SearchAreaInWidthArray = {1, 1}, hmeLevel1SearchAreaInHeightArray = {1, 1}, hmeLevel2SearchAreaInWidthArray = {1, 1}, hmeLevel2SearchAreaInHeightArray = {1, 1}, 
+  constrainedIntra = 0 '\000', frameRate = 60, frameRateNumerator = 0, frameRateDenominator = 0, encoderBitDepth = 8, compressedTenBitFormat = 0, rateControlMode = 0, 
+  sceneChangeDetection = 1, lookAheadDistance = 17, framesToBeEncoded = 0, targetBitRate = 7000000, maxQpAllowed = 48, minQpAllowed = 10, tune = 0 '\000', 
+  bitRateReduction = 1 '\001', improveSharpness = 1 '\001', videoUsabilityInfo = 0, highDynamicRangeInput = 0, accessUnitDelimiter = 0, bufferingPeriodSEI = 0, pictureTimingSEI = 0, 
+  registeredUserDataSeiFlag = 0, unregisteredUserDataSeiFlag = 0, recoveryPointSeiFlag = 0, enableTemporalId = 1, profile = 2, tier = 0, level = 0, 
+  inputOutputBufferFifoInitCount = 50, injectorFrameRate = 3932160, speedControlFlag = 0, asmType = ASM_AVX2, codeVpsSpsPps = 1 '\001'}
+
+
+// ./ffprobe ~/Videos/IMG_4596.MOV -of compact -show_streams -of json
