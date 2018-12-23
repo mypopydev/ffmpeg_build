@@ -613,33 +613,51 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
 
 
 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3
+// perf record
+// perf report
+  17.31%  xavs2    xavs2               [.] write_luma_block_coeff_fastrdo           
+  16.61%  xavs2    xavs2               [.] rdoq_cg                                 
+   7.84%  xavs2    xavs2               [.] xavs2_calc_satd_16x8_avx2               
+   3.90%  xavs2    xavs2               [.] est_rate_run                            
+   3.78%  xavs2    xavs2               [.] aec_write_run_level_luma                
+   2.60%  xavs2    xavs2               [.] xavs2_idct_c_32x32_avx2                 
+   2.36%  xavs2    xavs2               [.] write_chroma_block_coeff_fastrdo        
+   1.87%  xavs2    xavs2               [.] xavs2_dct_c_32x32_half_avx2             
+   1.43%  xavs2    xavs2               [.] xavs2_compress_ctu_inter                
+   1.23%  xavs2    xavs2               [.] xavs2_intpl_luma_ext_avx2               
+   1.22%  xavs2    xavs2               [.] xavs2_dct_c_16x16_avx2                  
+   1.19%  xavs2    xavs2               [.] sao_get_stat_block_EO_90                
+   1.16%  xavs2    xavs2               [.] xavs2_quant_c_avx2                      
+   1.09%  xavs2    xavs2               [.] xavs2_me_search                         
+   1.04%  xavs2    xavs2               [.] xavs2_pixel_satd_16x8_internal_avx2     
+   1.01%  xavs2    xavs2               [.] cu_rdcost_inter                         
+   0.97%  xavs2    xavs2               [.] sao_get_stat_block_EO_0                 
+   0.81%  xavs2    xavs2               [.] xavs2_rdoq_block                        
+   0.75%  xavs2    xavs2               [.] xavs2_dct_32x32_avx2                    
+   0.71%  xavs2    xavs2               [.] cu_recon_chroma                         
+   0.66%  xavs2    xavs2               [.] biari_encode_symbol_aec                 
+   0.65%  xavs2    xavs2               [.] xavs2_idct_c_16x16_avx2                 
+   0.58%  xavs2    xavs2               [.] wavelet_64x64_avx2                      
+   0.58%  xavs2    xavs2               [.] xavs2_rdo_get_pred_intra_luma_rmd       
+   0.57%  xavs2    xavs2               [.] lf_edge_core                            
+   0.55%  xavs2    xavs2               [.] xavs2_pixel_sa8d_8x8_internal_avx       
+   0.54%  xavs2    xavs2               [.] xavs2_me_search_sym                     
+   0.53%  xavs2    xavs2               [.] xavs2_dequant_avx2                      
+   0.50%  xavs2    xavs2               [.] xavs2_pixel_satd_8x8_internal_avx2
 
- 17.31%  xavs2    xavs2               [.] write_luma_block_coeff_fastrdo                                                                                                                                  ▒
-  16.61%  xavs2    xavs2               [.] rdoq_cg                                                                                                                                                         ▒
-   7.84%  xavs2    xavs2               [.] xavs2_calc_satd_16x8_avx2                                                                                                                                       ▒
-   3.90%  xavs2    xavs2               [.] est_rate_run                                                                                                                                                    ▒
-   3.78%  xavs2    xavs2               [.] aec_write_run_level_luma                                                                                                                                        ▒
-   2.60%  xavs2    xavs2               [.] xavs2_idct_c_32x32_avx2                                                                                                                                         ▒
-   2.36%  xavs2    xavs2               [.] write_chroma_block_coeff_fastrdo                                                                                                                                ▒
-   1.87%  xavs2    xavs2               [.] xavs2_dct_c_32x32_half_avx2                                                                                                                                     ▒
-   1.43%  xavs2    xavs2               [.] xavs2_compress_ctu_inter                                                                                                                                        ▒
-   1.23%  xavs2    xavs2               [.] xavs2_intpl_luma_ext_avx2                                                                                                                                       ▒
-   1.22%  xavs2    xavs2               [.] xavs2_dct_c_16x16_avx2                                                                                                                                          ▒
-   1.19%  xavs2    xavs2               [.] sao_get_stat_block_EO_90                                                                                                                                        ▒
-   1.16%  xavs2    xavs2               [.] xavs2_quant_c_avx2                                                                                                                                              ▒
-   1.09%  xavs2    xavs2               [.] xavs2_me_search                                                                                                                                                 ▒
-   1.04%  xavs2    xavs2               [.] xavs2_pixel_satd_16x8_internal_avx2                                                                                                                             ▒
-   1.01%  xavs2    xavs2               [.] cu_rdcost_inter                                                                                                                                                 ▒
-   0.97%  xavs2    xavs2               [.] sao_get_stat_block_EO_0                                                                                                                                         ▒
-   0.81%  xavs2    xavs2               [.] xavs2_rdoq_block                                                                                                                                                ▒
-   0.75%  xavs2    xavs2               [.] xavs2_dct_32x32_avx2                                                                                                                                            ▒
-   0.71%  xavs2    xavs2               [.] cu_recon_chroma                                                                                                                                                 ▒
-   0.66%  xavs2    xavs2               [.] biari_encode_symbol_aec                                                                                                                                         ▒
-   0.65%  xavs2    xavs2               [.] xavs2_idct_c_16x16_avx2                                                                                                                                         ▒
-   0.58%  xavs2    xavs2               [.] wavelet_64x64_avx2                                                                                                                                              ▒
-   0.58%  xavs2    xavs2               [.] xavs2_rdo_get_pred_intra_luma_rmd                                                                                                                               ▒
-   0.57%  xavs2    xavs2               [.] lf_edge_core                                                                                                                                                    ▒
-   0.55%  xavs2    xavs2               [.] xavs2_pixel_sa8d_8x8_internal_avx                                                                                                                               ▒
-   0.54%  xavs2    xavs2               [.] xavs2_me_search_sym                                                                                                                                             ▒
-   0.53%  xavs2    xavs2               [.] xavs2_dequant_avx2                                                                                                                                              ▒
-   0.50%  xavs2    xavs2               [.] xavs2_pixel_satd_8x8_internal_avx2  
+
+// perf -d -r 10
+     122478.917294      task-clock (msec)         #    1.059 CPUs utilized            ( +-  0.09% )
+            11,684      context-switches          #    0.095 K/sec                    ( +-  0.41% )
+                21      cpu-migrations            #    0.000 K/sec                    ( +- 15.55% )
+           102,422      page-faults               #    0.836 K/sec                    ( +-  0.00% )
+   458,898,322,463      cycles                    #    3.747 GHz                      ( +-  0.09% )  (49.97%)
+   833,606,196,617      instructions              #    1.82  insn per cycle           ( +-  0.02% )  (62.48%)
+    82,257,141,576      branches                  #  671.602 M/sec                    ( +-  0.02% )  (62.50%)
+     4,895,764,269      branch-misses             #    5.95% of all branches          ( +-  0.04% )  (62.52%)
+   197,987,852,893      L1-dcache-loads           # 1616.506 M/sec                    ( +-  0.02% )  (62.53%)
+    11,395,456,244      L1-dcache-load-misses     #    5.76% of all L1-dcache hits    ( +-  0.33% )  (62.51%)
+     2,621,987,381      LLC-loads                 #   21.408 M/sec                    ( +-  0.45% )  (49.99%)
+       174,183,085      LLC-load-misses           #    6.64% of all LL-cache hits     ( +-  0.23% )  (49.98%)
+
+          115.613098816 seconds time elapsed                                          ( +-  0.09% )
