@@ -613,7 +613,7 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
 
 
 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3
-// perf record
+// perf record -ag
 // perf report
   17.31%  xavs2    xavs2               [.] write_luma_block_coeff_fastrdo           
   16.61%  xavs2    xavs2               [.] rdoq_cg                                 
