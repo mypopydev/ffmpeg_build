@@ -646,7 +646,7 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
    0.50%  xavs2    xavs2               [.] xavs2_pixel_satd_8x8_internal_avx2
 
 
-// perf -d -r 10 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3 --Loglevel=-1
+// perf stat -d -r 10 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3 --Loglevel=-1
 
      122478.917294      task-clock (msec)         #    1.059 CPUs utilized            ( +-  0.09% )
             11,684      context-switches          #    0.095 K/sec                    ( +-  0.41% )
@@ -662,3 +662,22 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
        174,183,085      LLC-load-misses           #    6.64% of all LL-cache hits     ( +-  0.23% )  (49.98%)
 
           115.613098816 seconds time elapsed                                          ( +-  0.09% )
+
+
+// perf stat -d -r 10 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3 --Loglevel=-1 --RdoqLevel=0
+
+      92609.620748      task-clock (msec)         #    1.074 CPUs utilized            ( +-  0.15% )
+            14,021      context-switches          #    0.151 K/sec                    ( +- 11.63% )
+                64      cpu-migrations            #    0.001 K/sec                    ( +- 29.89% )
+           102,350      page-faults               #    0.001 M/sec                    ( +-  0.00% )
+   347,818,029,701      cycles                    #    3.756 GHz                      ( +-  0.06% )  (49.97%)
+   626,401,796,483      instructions              #    1.80  insn per cycle           ( +-  0.03% )  (62.50%)
+    50,944,195,061      branches                  #  550.096 M/sec                    ( +-  0.05% )  (62.52%)
+     2,944,771,570      branch-misses             #    5.78% of all branches          ( +-  0.05% )  (62.53%)
+   145,826,497,338      L1-dcache-loads           # 1574.637 M/sec                    ( +-  0.04% )  (62.51%)
+    10,980,243,581      L1-dcache-load-misses     #    7.53% of all L1-dcache hits    ( +-  0.17% )  (62.52%)
+     2,517,309,418      LLC-loads                 #   27.182 M/sec                    ( +-  0.44% )  (49.96%)
+       175,869,003      LLC-load-misses           #    6.99% of all LL-cache hits     ( +-  0.40% )  (49.99%)
+
+      86.260069207 seconds time elapsed                                          ( +-  0.17% )
+
