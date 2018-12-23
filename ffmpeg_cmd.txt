@@ -613,7 +613,7 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
 
 
 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3
-// perf record -ag
+// perf record -ag ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3 --Loglevel=-1
 // perf report
   17.31%  xavs2    xavs2               [.] write_luma_block_coeff_fastrdo           
   16.61%  xavs2    xavs2               [.] rdoq_cg                                 
@@ -646,7 +646,8 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
    0.50%  xavs2    xavs2               [.] xavs2_pixel_satd_8x8_internal_avx2
 
 
-// perf -d -r 10
+// perf -d -r 10 ./xavs2 --InputFile=/home/barry/Videos/aspen_1920x1080_30.yuv --FrameRate=4 --SourceWidth=1920 --SourceHeight=1080 --RateControl=0 --QP=27 --IntraPeriodMax=30 --IntraPeriodMin=30 --NumberBFrames=7 --OutputFile=test.avs --ReconFile=. --frames=570 --thread_frames=1 --thread_rows=1 --OpenGOP=0 --preset=3 --Loglevel=-1
+
      122478.917294      task-clock (msec)         #    1.059 CPUs utilized            ( +-  0.09% )
             11,684      context-switches          #    0.095 K/sec                    ( +-  0.41% )
                 21      cpu-migrations            #    0.000 K/sec                    ( +- 15.55% )
