@@ -681,3 +681,4 @@ sudo env LD_LIBRARY_PATH=xxxx perf stat -d ./ffmpeg xxxx
 
       86.260069207 seconds time elapsed                                          ( +-  0.17% )
 
+http://mile-high.video/files/mhv2018/ // PDF
