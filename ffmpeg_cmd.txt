@@ -689,7 +689,7 @@ http://mile-high.video/files/mhv2018/ // PDF
 
 echo -1 > /proc/sys/kernel/perf_event_paranoid
 echo 0 > /proc/sys/kernel/kptr_restrict
-
+echo 0 > /proc/sys/kernel/yama/ptrace_scope // threading trace
 
 RLE:
 
@@ -753,3 +753,6 @@ http://www.ipol.im/pub/art/2014/57/?utm_source=doi
 http://www.ipol.im/pub/art/2011/bcm_nlm/
 
 export PATH=$PATH:~/.local/bin
+
+// Enable AVX2 in FFmpeg
+./configure --enable-libxavs2 --enable-gpl --enable-libx264 --enable-libx265 --enable-openssl --enable-nonfree --disable-optimizations --extra-cflags=-mavx2
