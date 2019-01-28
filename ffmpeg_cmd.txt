@@ -756,3 +756,6 @@ export PATH=$PATH:~/.local/bin
 
 // Enable AVX2 in FFmpeg
 ./configure --enable-libxavs2 --enable-gpl --enable-libx264 --enable-libx265 --enable-openssl --enable-nonfree --disable-optimizations --extra-cflags=-mavx2
+
+
+./ffplay "http://pcvideows.titan.mgtv.com/c1/internettv/2018/12/02_0/D78EC7AD403EB9A1138138896132763A_20181202_1_1_2924_ts/B13FCDB0DFCAE169678023D384BB3210.m3u8?arange=0&pm=fd~Nmu2QfAjcDoPRaxeEtJXfgGwvYAeLQzSaQXAIPwML9Z6nRbjdgStVxl1auQy9IW5knmtJOfFfbv6Jb38SJM7xvWS_1xvlKu9PsPhqsLnL2_c9t9~LkDjXP3lEYsI_mSs9Qe8DkW9o~eC3L~78BzHjTuG_X6erydfUvl_dj9ZxdT8Z6jm~qCwuxXdvaFtaj6YEpQBv9iA58fymoysKnZEj2aeiMIXlwlkSHOgOKrsBgYyRnHDAkPI1oAmkeImKX04A9yHcYhqCfl3U484Ac9w__MWkvCNgiTn26PtLCD9uQ9lDFg_lo~EK3bJYMt7ZY1QZMb2~MNGQU3Ha~6MShE9H17UPiwmI16qtbchvWLe76uexfqTGftNxmdBipyvJ4coCmxpCR_taMR3PyvIIGzenVe20VUpMOfeq5FHjMpo-&vcdn=0&scid=25003?q-sign-algorithm=sha1&q-ak=AKID7CPVvL7Ui1jKmQMhaYokAiPIuumTBaKN&q-sign-time=1548665058;1548708258&q-key-time=1548665058;1548708258&q-header-list=&q-url-param-list=&q-signature=3263b6142bffee2bb01a80"
