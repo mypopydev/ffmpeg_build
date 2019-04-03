@@ -849,3 +849,6 @@ perf stat ./ffmpeg -i ~/Videos/auto_02.mp4 -an -vf "select=not(mod(n\,25))" -f n
 
 
 
+4. FFmpeg opencl
+
+./ffmpeg -init_hw_device opencl=gpu:0.0 -filter_hw_device gpu -i ~/Videos/skyfall2-trailer.mp4  -an -vf "format=yuv420p,hwupload,nlmeans_opencl,hwdownload,format=yuv420p" -f null /dev/null
