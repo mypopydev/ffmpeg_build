@@ -861,3 +861,8 @@ time ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -f null /dev/null
 time ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -an -vf fps=1 -f null /dev/null
 
 time ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -an -vf select='not(mod(n\,24))' -f null /dev/null
+
+
+6. CBS
+
+./ffmpeg -i ~/Videos/Etest.h264 -c:v copy -bsf:v trace_headers -f null /dev/null 
