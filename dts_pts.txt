@@ -1,0 +1,92 @@
+Elementary AVC/H.264 stream does not contain timing information (excluding
+rare cases when presentation times are signaled in picture-timing SEI messages).
+
+Therefore, in order to encapsulate elementary stream into mp4 container or
+mpeg-system program or transport stream it's required to compute DTS/PTS
+such that the following conditions are met:
+
+1) DTS <= PTS
+
+2) differences between PTS magnitudes of successive frames (in play order)
+is constant and equal to 1/fps (whre fps is frame rate). In other words
+PTS of current frame differ from PTS of the previous frame (in presentation
+order) equal to the frame duration (i.e. 1/fps).
+
+3) If HRD is used then PTS-DTS gap should be small in order not to violate DPB buffer.
+
+Let's for simplicity assume that both DTS and PTS are in frame duration units
+(in case of interlace video - in field duration units).
+
+Case 1:  [B frames are not used]
+
+DTS = PTS and DTS equal to frame counter
+
+Case 2:  [B frames are used but not used as reference (i.e. no B-pyramid)]
+
+Let's assume that GOP structure is fixed in the sense that the interval M
+betweeen two I/P frames in encoding order is constant. For example:
+M for IPBBPBB... cadence is 2, M for IPBPBIB... cadence is 1.
+
+Calculation of DTS/PTS can be outlined as follows:
+
+For the very first frame  DTS = 0 and PTS = 1 (one frame period delay)
+
+For other frames Do
+
+    If frame is B then PTS = DTS (since B frame is not used for reference
+    and there is no sense to delay it in DPB)
+
+    If frame is P or I  then  PTS = DTS + M + 1
+
+EndFor
+
+If M is not constant we can take M equal to the maximal interval between I/P frames
+(in encoding order). For example, for BluRay streams we know a-priory that M does not exceed 3
+(BluRay spec. does not allow more than 3 consecutive B frames present). However, if we use M
+as the maximal interval between I/P frames then we guarnatee DTS<=PTS, however differences
+between PTS of successive frames (in play order) might be not equal to the frame duration
+and consequently the playback is jittered.
+
+The following example illustrates PTS jitter:
+
+Encoding order:
+
+I0  P1  B2   B3   P4   B5   B6   B7   P8   B9
+
+Play order
+
+I0  B2  B3   P1   B5   B6   B7   P4   B9   P8
+
+Take M = 3 (max B before P)
+
+Frame       DTS       PTS
+
+I0          0           1
+
+P1          1           5 // 1 + 3 + 1 ==> 1 + 2 + 1
+
+B2          2           2
+
+B3          3           3
+
+P4          4           8 // 4 + 3 + 1
+
+B5          5           5
+
+B6          6           6
+
+B7          7           7
+
+P8          8           12 // 8 + 3 + 1
+
+B9          9           9
+
+So, PTS playback is not smooth because difference in PTS between two successive frames
+(in play order) e.g. B3 and P1 is 2 frame periods and not 1.
+
+To resolve this PTS gap issue, for each I/P frame we have to look-ahead and to
+determine how many B frames following the current I/P frame. 
+
+If we come back to the above example, for P1 the interval M=2 and hence PTS
+of P1 equal to 4 instead of 5.
+
