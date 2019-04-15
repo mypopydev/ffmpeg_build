@@ -866,3 +866,23 @@ time ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -an -vf select='not(mod(n\,24))' 
 6. CBS
 
 ./ffmpeg -i ~/Videos/Etest.h264 -c:v copy -bsf:v trace_headers -f null /dev/null 
+
+
+7. 
+
+./ffmpeg -f rawvideo -pix_fmt yuv420p10le -s 3840x2160 -r 1 -i ~/Videos/4k_yuv420p10le_1_frame.yuv -pix_fmt yuv420p -f null /dev/null -loglevel 99
+
+
+
+./ffmpeg_g -f rawvideo -pix_fmt yuv420p10le -s 3840x2160 -r 1 -i /home/barry/Videos/4k_yuv420p10le_1_frame.yuv -sws_flags +print_info -pix_fmt yuv420p -f null /dev/null -loglevel 99
+
+planarCopyWrapper // 10bits -> 8 bits
+
+DITHER_COPY(dstPtr, dstStride[plane], srcPtr2, srcStride[plane]/2, av_bswap16, )
+#define DITHER_COPY(dst, dstStride, src, srcStride, bswap, dbswap)\
+
+a).  -gdwarf-2 -g3 
+
+b). macro expand 
+
+unsigned shift= src_depth-dst_depth, tmp; if (c->dither == SWS_DITHER_NONE) { for (i = 0; i < height; i++) { for (j = 0; j < length-7; j+=8) { dstPtr[j+0] = (av_bswap16(srcPtr2[j+0])>>shift); dstPtr[j+1] = (av_bswap16(srcPtr2[j+1])>>shift); dstPtr[j+2] = (av_bswap16(srcPtr2[j+2])>>shift); dstPtr[j+3] = (av_bswap16(srcPtr2[j+3])>>shift); dstPtr[j+4] = (av_bswap16(srcPtr2[j+4])>>shift); dstPtr[j+5] = (av_bswap16(srcPtr2[j+5])>>shift); dstPtr[j+6] = (av_bswap16(srcPtr2[j+6])>>shift); dstPtr[j+7] = (av_bswap16(srcPtr2[j+7])>>shift); } for (; j < length; j++) { dstPtr[j] = (av_bswap16(srcPtr2[j])>>shift); } dstPtr += dstStride[plane]; srcPtr2 += srcStride[plane]/2; } } else if (shiftonly) { for (i = 0; i < height; i++) { const uint8_t *dither= dithers[shift-1][i&7]; for (j = 0; j < length-7; j+=8) { tmp = (av_bswap16(srcPtr2[j+0]) + dither[0])>>shift; dstPtr[j+0] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+1]) + dither[1])>>shift; dstPtr[j+1] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+2]) + dither[2])>>shift; dstPtr[j+2] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+3]) + dither[3])>>shift; dstPtr[j+3] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+4]) + dither[4])>>shift; dstPtr[j+4] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+5]) + dither[5])>>shift; dstPtr[j+5] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+6]) + dither[6])>>shift; dstPtr[j+6] = (tmp - (tmp>>dst_depth)); tmp = (av_bswap16(srcPtr2[j+7]) + dither[7])>>shift; dstPtr[j+7] = (tmp - (tmp>>dst_depth)); } for (; j < length; j++) { tmp = (av_bswap16(srcPtr2[j]) + dither[j&7])>>shift; dstPtr[j] = (tmp - (tmp>>dst_depth)); } dstPtr += dstStride[plane]; srcPtr2 += srcStride[plane]/2; } } else { for (i = 0; i < height; i++) { const uint8_t *dither= dithers[shift-1][i&7]; for (j = 0; j < length-7; j+=8) { tmp = av_bswap16(srcPtr2[j+0]); dstPtr[j+0] = ((tmp - (tmp>>dst_depth) + dither[0])>>shift); tmp = av_bswap16(srcPtr2[j+1]); dstPtr[j+1] = ((tmp - (tmp>>dst_depth) + dither[1])>>shift); tmp = av_bswap16(srcPtr2[j+2]); dstPtr[j+2] = ((tmp - (tmp>>dst_depth) + dither[2])>>shift); tmp = av_bswap16(srcPtr2[j+3]); dstPtr[j+3] = ((tmp - (tmp>>dst_depth) + dither[3])>>shift); tmp = av_bswap16(srcPtr2[j+4]); dstPtr[j+4] = ((tmp - (tmp>>dst_depth) + dither[4])>>shift); tmp = av_bswap16(srcPtr2[j+5]); dstPtr[j+5] = ((tmp - (tmp>>dst_depth) + dither[5])>>shift); tmp = av_bswap16(srcPtr2[j+6]); dstPtr[j+6] = ((tmp - (tmp>>dst_depth) + dither[6])>>shift); tmp = av_bswap16(srcPtr2[j+7]); dstPtr[j+7] = ((tmp - (tmp>>dst_depth) + dither[7])>>shift); } for (; j < length; j++) { tmp = av_bswap16(srcPtr2[j]); dstPtr[j] = ((tmp - (tmp>>dst_depth) + dither[j&7])>>shift); } dstPtr += dstStride[plane]; srcPtr2 += srcStride[plane]/2; } }
