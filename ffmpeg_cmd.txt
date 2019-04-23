@@ -890,3 +890,5 @@ unsigned shift= src_depth-dst_depth, tmp; if (c->dither == SWS_DITHER_NONE) { fo
 ./ffmpeg -init_hw_device opencl=cpu:0:0 -filter_hw_device cpu -i ~/Videos/skyfall2-trailer.mp4  -an -vf "format=yuv420p,hwupload,unsharp_opencl,hwdownload,format=yuv420p" -f null /dev/null
 
 ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -vf unsharp -f null /dev/null
+
+sed -n '/\[Parsed_fps/p' ffmpeg-20190423-192131.log  > fps.txt
