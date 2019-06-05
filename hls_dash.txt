@@ -12,4 +12,4 @@ HEVC HLS with fMP4:
 
 http://bitmovin-a.akamaihd.net/content/dataset/multi-codec/hevc/stream_fmp4.m3u8
 
-3.
+3. https://docs.huihoo.com/apple/wwdc/2010/
