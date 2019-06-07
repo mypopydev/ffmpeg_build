@@ -1,0 +1,22 @@
+ffmpeg \
+-i TOS.mp4 \
+-i TOS.mp4 \
+-i TOS.mp4 \
+-i TOS.mp4 \
+-s:v:0 1920x1080 -c:v:0 libx264 -b:v:0 4000k \
+-s:v:1 1280x720 -c:v:1 libx264 -b:v:1 2000k \
+-s:v:2 854x480 -c:v:2 libx264 -b:v:2 1000k \
+-s:v:3 640x360 -c:v:3 libx264 -b:v:3 600k \
+-c:a:0 copy \
+-map 0:a -map 0:v -map 1:v -map 2:v -map 3:v \
+-var_stream_map "a:0,agroup:audio v:0,agroup:audio v:1,agroup:audio v:2,agroup:audio v:3,agroup:audio" \
+-threads 0 \
+-f hls \
+-movflags frag_keyframe \
+-hls_flags single_file+independent_segments \
+-hls_segment_type fmp4 \
+-hls_list_size 0 
+-hls_time 10 \
+hls_allow_cache 1 \
+-master_pl_name master.m3u8 \
+-y video%v.m3u8
