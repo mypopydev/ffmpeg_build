@@ -15,8 +15,13 @@ ffmpeg \
 -movflags frag_keyframe \
 -hls_flags single_file+independent_segments \
 -hls_segment_type fmp4 \
--hls_list_size 0 
+-hls_list_size 0 \
 -hls_time 10 \
-hls_allow_cache 1 \
+-hls_allow_cache 1 \
 -master_pl_name master.m3u8 \
 -y video%v.m3u8
+
+
+./mp4fragment --verbosity 3 --debug ~/Videos/1080P-5M-23fps-1min.mp4 --fragment-duration 10000 1080P-5M-23fps-1min-f.mp4
+
+../ffmpeg -i /home/barry/Sources/codec/Bento4/Build/Targets/x86_64-unknown-linux/Debug/1080P-5M-23fps-1min-f.mp4 -c:v:0 copy -c:a:0 copy -map 0:a -map 0:v -var_stream_map "a:0,agroup:audio v:0,agroup:audio" -threads 0 -f hls -movflags frag_keyframe -hls_flags single_file+independent_segments -hls_segment_type fmp4 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -master_pl_name master.m3u8 -y video%v.m3u8
