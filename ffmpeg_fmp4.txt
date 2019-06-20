@@ -25,3 +25,110 @@ ffmpeg \
 ./mp4fragment --verbosity 3 --debug ~/Videos/1080P-5M-23fps-1min.mp4 --fragment-duration 10000 1080P-5M-23fps-1min-f.mp4
 
 ../ffmpeg -i /home/barry/Sources/codec/Bento4/Build/Targets/x86_64-unknown-linux/Debug/1080P-5M-23fps-1min-f.mp4 -c:v:0 copy -c:a:0 copy -map 0:a -map 0:v -var_stream_map "a:0,agroup:audio v:0,agroup:audio" -threads 0 -f hls -movflags frag_keyframe -hls_flags single_file+independent_segments -hls_segment_type fmp4 -hls_list_size 0 -hls_time 10 -hls_allow_cache 1 -master_pl_name master.m3u8 -y video%v.m3u8
+
+./ffprobe -i /home/barry/Sources/codec/Bento4/Build/Targets/x86_64-unknown-linux/Debug/1080P-5M-23fps-1min-f.mp4 -v error -select_streams v:0 -show_packets | grep flags
+
+ ./ffprobe -i /home/barry/Sources/codec/Bento4/Build/Targets/x86_64-unknown-linux/Debug/1080P-5M-23fps-1min-f.mp4 -v error -select_streams v:0 -show_packets | grep flags | awk '/flags=K_/{print NR" : "$0}'
+
+1 : flags=K_
+289 : flags=K_ 12.01
+478 : flags=K_ 7.88
+[PACKET]
+codec_type=video
+stream_index=0
+pts=479448
+pts_time=19.977000
+dts=478440
+dts_time=19.935000
+duration=1001
+duration_time=0.041708
+convergence_duration=N/A
+convergence_duration_time=N/A
+size=77604
+pos=10465362
+flags=K_
+
+706 : flags=K_ 9.50
+[PACKET]
+codec_type=video
+stream_index=0
+pts=707705
+pts_time=29.487708
+dts=706697
+dts_time=29.445708
+duration=1001
+duration_time=0.041708
+convergence_duration=N/A
+convergence_duration_time=N/A
+size=74491
+pos=19977747
+flags=K_
+[/PACKET]
+
+965 : flags=K_
+1209 : flags=K_
+1416 : flags=K_
+
+
+
+./mp4fragment --verbosity 3 --debug ~/Videos/1080P-5M-23fps-1min.mp4 --fragment-duration 10000 1080P-5M-23fps-1min-f-4.mp4
+Using track ID 1 as anchor
+==== Track ID 1 - dts=0, target=160000, start=0, end=288/1488
+fragment: track ID 1
+ 288 samples
+ constant sample duration: no
+---- Track ID 2 - dts=0, target=576561, start=0, end=563/2899
+fragment: track ID 2
+ 563 samples
+ constant sample duration: no
+==== Track ID 1 - dts=192187, target=320000, start=288, end=477/1488
+fragment: track ID 1
+ 189 samples
+ constant sample duration: no
+---- Track ID 2 - dts=576504, target=954945, start=563, end=933/2899
+fragment: track ID 2
+ 370 samples
+ constant sample duration: no
+==== Track ID 1 - dts=318315, target=480000, start=477, end=705/1488
+fragment: track ID 1
+ 228 samples
+ constant sample duration: no
+---- Track ID 2 - dts=955400, target=1411425, start=933, end=1378/2899
+fragment: track ID 2
+ 445 samples
+ constant sample duration: no
+==== Track ID 1 - dts=470475, target=640000, start=705, end=964/1488
+fragment: track ID 1
+ 259 samples
+ constant sample duration: no
+---- Track ID 2 - dts=1411080, target=1929921, start=1378, end=1885/2899
+fragment: track ID 2
+ 507 samples
+ constant sample duration: no
+==== Track ID 1 - dts=643307, target=800000, start=964, end=1208/1488
+fragment: track ID 1
+ 244 samples
+ constant sample duration: no
+---- Track ID 2 - dts=1930280, target=2418417, start=1885, end=2362/2899
+fragment: track ID 2
+ 477 samples
+ constant sample duration: no
+==== Track ID 1 - dts=806139, target=960000, start=1208, end=1415/1488
+fragment: track ID 1
+ 207 samples
+ constant sample duration: no
+---- Track ID 2 - dts=2418712, target=2832849, start=2362, end=2766/2899
+fragment: track ID 2
+ 404 samples
+ constant sample duration: no
+==== Track ID 1 - dts=944283, target=1120000, start=1415, end=1488/1488
+fragment: track ID 1
+[Track ID 1 has reached the end]
+ 73 samples
+ constant sample duration: no
+---- Track ID 2 - dts=2832392, target=2978961, start=2766, end=2899/2899
+fragment: track ID 2
+[Track ID 2 has reached the end]
+ 133 samples
+ constant sample duration: no
+
