@@ -892,3 +892,7 @@ unsigned shift= src_depth-dst_depth, tmp; if (c->dither == SWS_DITHER_NONE) { fo
 ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -vf unsharp -f null /dev/null
 
 sed -n '/\[Parsed_fps/p' ffmpeg-20190423-192131.log  > fps.txt
+
+# 1 V + 2 A (0 none, 1 default)
+
+./ffmpeg -t 10 -re -f lavfi -i color=red:s=320x240 -f lavfi -i "aevalsrc=cos(2*PI*t)*sin(2*PI*(440+4*t)*t):d=10" -f lavfi -i "aevalsrc=cos(PI*t)*sin(4*PI*(440+4*t)*t):d=10" -b:a:0 32k -b:a:1 64k -b:v:0 1000k -map 1:a -map 2:a -map 0:v -disposition:a:1 default -f mp4 test.mp4 -y
