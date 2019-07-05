@@ -1,0 +1,5 @@
+1. https://trac.ffmpeg.org/wiki/colorspace
+
+2. https://kdenlive.org/en/project/color-hell-ffmpeg-transcoding-and-preserving-bt-601/
+
+3. https://www.mysterybox.us/blog/tag/BT.2020
