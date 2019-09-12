@@ -1,0 +1,26 @@
+gdb --args ./ffmpeg_g -max_reload 5  -i https://yayunhui-1251820392.cos.ap-beijing.myqcloud.com/t_ffmpeg/streams_bug/ts-miss-404/class_test.m3u8 -f null /dev/null
+
+
+0  read_data (opaque=0x555557db06c0, buf=0x555557fb4740 "\035\354\373\356\253\343\004>\245c\240\235\366\364\213\230\300\240!\276\254\343F+\360\360\276q\234\"L:\343\270\377\352\315\062\244\312G\001", 
+    buf_size=32768) at libavformat/hls.c:1411
+#1  0x0000555555a56e07 in read_packet_wrapper (s=0x555557db16c0, 
+    buf=0x555557fb4740 "\035\354\373\356\253\343\004>\245c\240\235\366\364\213\230\300\240!\276\254\343F+\360\360\276q\234\"L:\343\270\377\352\315\062\244\312G\001", size=32768)
+    at libavformat/aviobuf.c:538
+#2  0x0000555555a57069 in fill_buffer (s=0x555557db16c0) at libavformat/aviobuf.c:587
+#3  0x0000555555a57433 in avio_read (s=0x555557db16c0, buf=0x7fffffffca90 "\001", size=188) at libavformat/aviobuf.c:680
+#4  0x0000555555a575ac in ffio_read_indirect (s=0x555557db16c0, buf=0x7fffffffca90 "\001", size=188, data=0x7fffffffca60) at libavformat/aviobuf.c:715
+#5  0x0000555555b2f1ae in read_packet (s=0x555557dbe880, buf=0x7fffffffca90 "\001", raw_packet_size=188, data=0x7fffffffca60) at libavformat/mpegts.c:2803
+#6  0x0000555555b2f4f6 in handle_packets (ts=0x555557e243c0, nb_packets=0) at libavformat/mpegts.c:2870
+#7  0x0000555555b30250 in mpegts_read_packet (s=0x555557dbe880, pkt=0x7fffffffccb0) at libavformat/mpegts.c:3120
+#8  0x0000555555bd9df0 in ff_read_packet (s=0x555557dbe880, pkt=0x7fffffffccb0) at libavformat/utils.c:856
+#9  0x0000555555bdd040 in read_frame_internal (s=0x555557dbe880, pkt=0x555557db1808) at libavformat/utils.c:1582
+#10 0x0000555555bde09d in av_read_frame (s=0x555557dbe880, pkt=0x555557db1808) at libavformat/utils.c:1784
+#11 0x0000555555a9ecfb in hls_read_packet (s=0x555557da2200, pkt=0x7fffffffcfb0) at libavformat/hls.c:2081
+#12 0x0000555555bd9df0 in ff_read_packet (s=0x555557da2200, pkt=0x7fffffffcfb0) at libavformat/utils.c:856
+#13 0x0000555555bdd040 in read_frame_internal (s=0x555557da2200, pkt=0x7fffffffd2f0) at libavformat/utils.c:1582
+#14 0x0000555555bde09d in av_read_frame (s=0x555557da2200, pkt=0x7fffffffd2f0) at libavformat/utils.c:1784
+#15 0x000055555568e9b5 in get_input_packet (f=0x555557f62cc0, pkt=0x7fffffffd2f0) at fftools/ffmpeg.c:4150
+#16 0x000055555568ee50 in process_input (file_index=0) at fftools/ffmpeg.c:4267
+#17 0x0000555555690f27 in transcode_step () at fftools/ffmpeg.c:4638
+#18 0x00005555556910a4 in transcode () at fftools/ffmpeg.c:4692
+#19 0x0000555555691a86 in main (argc=8, argv=0x7fffffffdc98) at fftools/ffmpeg.c:4894
