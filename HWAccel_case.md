@@ -82,11 +82,15 @@ c).  [doc/examples/vaapi_encode.c](https://github.com/FFmpeg/FFmpeg/blob/master/
 
 ### 6.  HWdevice
 
-`av_hwdevice_ctx_create()`  ,then attach the hwdevice_ctx to AVCodecContext
+```
+
+av_hwdevice_ctx_create()  ,then attach the hwdevice_ctx to AVCodecContext
  |
- +---->  ret = `device_ctx->internal->hw_type->device_create`(device_ctx, device, opts, flags);
+ +---->  ret = device_ctx->internal->hw_type->device_create(device_ctx, device, opts, flags);
  |
- +-----> ret = `av_hwdevice_ctx_init` (device_ref); // `ctx->internal->hw_type->device_init()`
+ +-----> ret = av_hwdevice_ctx_init (device_ref); // ctx->internal->hw_type->device_init()
+
+```
 
 in  [doc/examples/hw_decode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/hw_decode.c) 
 
