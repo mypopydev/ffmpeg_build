@@ -74,9 +74,11 @@ ffmpeg -init_hw_device qsv=hw -filter_hw_device hw -f rawvideo -pix_fmt yuv420p 
 
 ### 5. FFmpeg HW API test case
 
-a).  [doc/examples/hw_decode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/hw_decode.c)  (HW decoder, then copy the Frame to CPU), I think for hwdownload case, you can use this example as start point
+a).  [doc/examples/hw_decode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/hw_decode.c)  (HW decoding, then copy the HW Frame to CPU), I think for hwdownload case, you can use this example as start point
 
 b).  [doc/examples/vaapi_transcode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/vaapi_transcode.c)
+
+c).  [doc/examples/vaapi_encode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/vaapi_encode.c)
 
 ### 6.  HWdevice
 
