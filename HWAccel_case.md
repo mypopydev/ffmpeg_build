@@ -77,3 +77,30 @@ ffmpeg -init_hw_device qsv=hw -filter_hw_device hw -f rawvideo -pix_fmt yuv420p 
 a).  [doc/examples/hw_decode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/hw_decode.c)  (HW decoder, then copy the Frame to CPU), I think for hwdownload case, you can use this example as start point
 
 b).  [doc/examples/vaapi_transcode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/vaapi_transcode.c)
+
+### 6.  HWdevice
+
+`av_hwdevice_ctx_create()`  ,then attach the hwdevice_ctx to AVCodecContext
+ |
+ +---->  ret = `device_ctx->internal->hw_type->device_create`(device_ctx, device, opts, flags);
+ |
+ +-----> ret = `av_hwdevice_ctx_init` (device_ref); // `ctx->internal->hw_type->device_init()`
+
+in  [doc/examples/hw_decode.c](https://github.com/FFmpeg/FFmpeg/blob/master/doc/examples/hw_decode.c) 
+
+
+``` c
+static int hw_decoder_init(AVCodecContext *ctx, const enum AVHWDeviceType type)
+{
+    int err = 0;
+
+    if ((err = av_hwdevice_ctx_create(&hw_device_ctx, type,
+                                      NULL, NULL, 0)) < 0) {
+        fprintf(stderr, "Failed to create specified HW device.\n");
+        return err;
+    }
+    ctx->hw_device_ctx = av_buffer_ref(hw_device_ctx);
+    
+    return err;
+}
+```
