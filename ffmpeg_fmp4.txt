@@ -7,9 +7,9 @@ ffmpeg \
 -s:v:1 1280x720 -c:v:1 libx264 -b:v:1 2000k \
 -s:v:2 854x480 -c:v:2 libx264 -b:v:2 1000k \
 -s:v:3 640x360 -c:v:3 libx264 -b:v:3 600k \
--c:a:0 copy \
--map 0:a -map 0:v -map 1:v -map 2:v -map 3:v \
--var_stream_map "a:0,agroup:audio v:0,agroup:audio v:1,agroup:audio v:2,agroup:audio v:3,agroup:audio" \
+-b:a:0 32k -b:a:1 64k \
+-map 0:a -map 1:a -map 0:v -map 1:v -map 2:v -map 3:v \
+-var_stream_map "a:0,agroup:audio_low a:1,agroup:audio_high v:0,agroup:audio_low v:1,agroup:audio_low v:2,agroup:audio_high v:3,agroup:audio_high" \
 -threads 0 \
 -f hls \
 -movflags frag_keyframe \
@@ -21,6 +21,34 @@ ffmpeg \
 -master_pl_name master.m3u8 \
 -y video%v.m3u8
 
+
+// 切片会有问题
+./ffmpeg -re -t 20 -f lavfi -i color=red:s=320x240 \
+-f lavfi -i "aevalsrc=cos(2*PI*t)*sin(2*PI*(440+4*t)*t):d=20" \
+-f lavfi -i "aevalsrc=cos(PI*t)*sin(2*PI*(440+4*t)*t):d=20" \
+-b:a:0 32k -b:a:1 64k -b:v:0 1000k   -map 1:a -map 2:a -map 0:v \
+-f hls   \
+-hls_playlist_type vod \
+-var_stream_map "a:0,agroup:aud_low,default:yes a:1,agroup:aud_high v:0,agroup:aud_low v:0,agroup:aud_high"   \
+-master_pl_name master.m3u8 out_%v.m3u8
+
+../ffmpeg -re -t 20 -f lavfi -i color=red:s=320x240 \
+-f lavfi -i "aevalsrc=cos(2*PI*t)*sin(2*PI*(440+4*t)*t):d=20" \
+-f lavfi -i "aevalsrc=cos(PI*t)*sin(2*PI*(440+4*t)*t):d=20" \
+-b:a:0 32k -b:a:1 64k -b:v:0 1000k   -map 1:a -map 2:a -map 0:v \
+-f hls   \
+-hls_playlist_type vod \
+-var_stream_map "a:0,agroup:aud,default:yes a:1,agroup:aud v:0,agroup:aud"   \
+-master_pl_name master.m3u8 out_%v.m3u8
+
+./ffmpeg -re -t 20 -f lavfi -i color=red:s=320x240 \
+-f lavfi -i "aevalsrc=cos(2*PI*t)*sin(2*PI*(440+4*t)*t):d=20" \
+-f lavfi -i "aevalsrc=cos(PI*t)*sin(2*PI*(440+4*t)*t):d=20" \
+-b:a:0 32k -b:a:1 64k -b:v:0 1000k   -map 1:a -map 2:a -map 0:v \
+-f hls   \
+-hls_playlist_type vod \
+-var_stream_map "a:0,agroup:aud a:1,agroup:aud,default:yes v:0,agroup:aud"   \
+-master_pl_name master.m3u8 out_%v.m3u8
 
 ./mp4fragment --verbosity 3 --debug ~/Videos/1080P-5M-23fps-1min.mp4 --fragment-duration 10000 1080P-5M-23fps-1min-f.mp4
 
@@ -131,4 +159,26 @@ fragment: track ID 2
 [Track ID 2 has reached the end]
  133 samples
  constant sample duration: no
+
+
+ python2 Source/Python/utils/mp4-dash.py -v  \
+ -d \
+ --force\
+ --hls \
+ --no-split 
+ --use-segment-timeline \
+ --exec-dir /home/barry/Sources/codec/Bento4/Build/Targets/x86_64-unknown-linux/Debug   
+ /home/barry/Sources/codec/Bento4/Build/Targets/x86_64-unknown-linux/Debug/output-10.mp4
+
+ ffmpeg -re -i in.ts -b:a:0 32k -b:a:1 64k -b:v:0 2000k \
+ -map 0:a -map 0:a -map 0:v -f hls \
+ -var_stream_map "a:0,agroup:aud_low,default:yes,language:ENG a:1,agroup:aud_low,language:CHN v:0,agroup:aud_low" \
+ -master_pl_name master.m3u8 \
+ http://example.com/live/out_%v.m3u8
+
+ ffmpeg -re -i in.ts -b:a:0 32k -b:a:1 64k -b:v:0 1000k \
+  -map 0:a -map 0:a -map 0:v -f hls \
+  -var_stream_map "a:0,agroup:aud_low,default:yes,language:ENG a:1,agroup:aud_low,language:CHN v:0,agroup:aud_low" \
+  -master_pl_name master.m3u8 \
+  http://example.com/live/out_%v.m3u8
 

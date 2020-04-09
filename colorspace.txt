@@ -3,3 +3,11 @@
 2. https://kdenlive.org/en/project/color-hell-ffmpeg-transcoding-and-preserving-bt-601/
 
 3. https://www.mysterybox.us/blog/tag/BT.2020
+
+4. https://fourcc.org/yuv.php
+
+5. https://poynton.ca/notes/colour_and_gamma/ColorFAQ.html#RTFToC26
+
+6. https://wiki.videolan.org/YUV/
+
+7. https://stevens.li/guides/video/converting-hdr-to-sdr-with-ffmpeg/

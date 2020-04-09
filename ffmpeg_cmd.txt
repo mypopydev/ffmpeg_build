@@ -900,3 +900,6 @@ sed -n '/\[Parsed_fps/p' ffmpeg-20190423-192131.log  > fps.txt
 ./tscast -l -1 -i ~/Videos/中央新闻\ _20191223194500-20191223201552.ts --rtpheader 1 -d 127.0.0.1:9988
 
 ./ffplay -f mpegts rtp://127.0.0.1:9988
+
+
+git fetch origin --tags

@@ -18,7 +18,10 @@ AVC 30fps
 1280x720  3000kb/4500kb
 1920x1080 6000kb/7800kb
 
-1. ARB 1:N case without encoder/audio (SW case)
+1. ARB 1:N case without encodeOBJS-$(CONFIG_H264_NI_DECODER)         += nidec_h264.o nicodec.o nidec.o
+OBJS-$(CONFIG_H265_NI_DECODER)         += nidec_hevc.o nicodec.o nidec.o
+OBJS-$(CONFIG_H265_NI_ENCODER)         += nienc_hevc.o nicodec.o nienc.o
+OBJS-$(CONFIG_H264_NI_ENCODER)         += nienc_h264.o nicodec.o nienc.or/audio (SW case)
 
 ./ffmpeg -i ~/Videos/skyfall2-trailer.mp4 -an -f null /dev/null
 
