@@ -1,0 +1,109 @@
+Nit Codec
+
+1. ssh
+
+ssh: 211.147.94.58
+port: 35601
+account: sltm18_u1
+password: SLTM  
+
+ssh -l sltm18_u1 -p 35601 211.147.94.58
+
+2. code
+
+libxcode: 
+
+- ./configure --prefix=/home/barry/Sources/FFmpeg/ffmpeg_build 
+- make
+- make install DESTDIR=/home/barry/Sources/FFmpeg/ffmpeg_build
+
+a). make install 需要sudo 安装到特定的目录，而不只是指定的目录
+b). xcoder.pc 里面xcoder 库的版本号没有正常管理，一直是Version: 0.0
+
+FFmpeg 4.1.3:
+
+3.1.1
+
+
+- configure 做了改变，应该可以默认使用FFmpeg自身的configure 做改动, 以configure 选项的方式会更为合理一些
+- 增加 --enable-libxcode 的选项，类似libx264 的做法 （需要同时更新上面的xcoder.pc部分）
+
+	h264_ni_decoder_deps="libxcoder"
+	h265_ni_encoder_deps="libxcoder"
+	h265_ni_decoder_deps="libxcoder"
+	h264_ni_encoder_deps="libxcoder"
+
+- 集成部分 
+	OBJS-$(CONFIG_H264_NI_DECODER)         += nidec_h264.o nicodec.o nidec.o
+	OBJS-$(CONFIG_H265_NI_DECODER)         += nidec_hevc.o nicodec.o nidec.o
+	OBJS-$(CONFIG_H265_NI_ENCODER)         += nienc_hevc.o nicodec.o nienc.o
+	OBJS-$(CONFIG_H264_NI_ENCODER)         += nienc_h264.o nicodec.o nienc.o
+
+	- nicodec.c // 代码格式问题，建议参考： https://ffmpeg.org/developer.html#Coding-Rules-1
+	            // trace 部分使用了 printf，建议统一到 av_log
+	- nidec_hevc.o nidec_h264.o nicodec.o  三个文件合并为一个文件，encoder部分也是如此
+
+	- .capabilities   = AV_CODEC_CAP_AVOID_PROBING | AV_CODEC_CAP_DELAY, // AV_CODEC_CAP_AVOID_PROBING 不应该出现在Encoder中
+
+	- options 部分：
+	h264_ni_enc AVOptions:
+  	-xcoder            <string>     E..V..... Select which XCoder card to use. (default "bestload")
+     bestload                     E..V..... Pick the least loaded XCoder/encoder available.
+     bestinst                     E..V..... Pick the XCoder/encoder with the least number of running encoding instances.
+     bestrtenc                    E..V..... Pick the least loaded XCoder/encoder that can handle the encoding task in real-time.
+     list                         E..V..... List the available XCoder cards.
+  	-enc               <int>        E..V..... Select which encoder to use. First is 0, second is 1, and so on. (from -1 to INT_MAX) (default best)
+       best                         E..V..... Pick the best encoder available.  // 看着是Auto，即让xcoder选择codec
+  	-log               <string>     E..V..... set the ni XCoder log level
+  	-preset            <string>     E..V..... set the ni XCoder preset // 需要一些说明 default & custom
+  	-xcoder-params     <string>     E..V..... set the XCoder configuration using a :-separated list of key=value parameters
+  	-xcoder-gop        <string>     E..V..... set the XCoder custom gop using a :-separated list of key=value parameters
+
+
+3. API
+
+- key frame setting in FFmpeg	
+    int retrieve_frame(AVCodecContext *avctx, AVFrame *data, int *got_frame,
+                   ni_frame_t *xfme)
+    AVFrame->key_frame 设置有问题
+
+
+- Frame type: 
+a) DECODER_PIC_TYPE_IDR  与 PIC_TYPE_NIDR 的区别
+b) 对于265 怎么传递的Frame的类型？  IS_IRAP(s)
+
+typedef enum
+{
+    PIC_TYPE_I = 0,                    /*!*< I picture */
+    PIC_TYPE_P = 1,                    /*!*< P picture */
+    PIC_TYPE_B = 2,                    /*!*< B picture (except VC1) */
+
+    PIC_TYPE_CRA = 4,
+    PIC_TYPE_IDR = 3,                  /*!*< Encoder IDR pic type */
+    DECODER_PIC_TYPE_IDR = 5,          /*!*< Decoder-returned IDR pic type */
+    PIC_TYPE_NIDR = 5,                  /*!*< H.264/H.265 IDR picture */
+    PIC_TYPE_MAX                       /*!*< No Meaning */
+} ni_pic_type_t;
+
+- SEI 的处理 （解码，编码）
+
+- Frame的格式    frame->format = avctx->pix_fmt;          /* ??? AV_PIX_FMT_YUV420P */ 其他格式的处理
+
+- 建议把fata 跑完，特别是decoder 部分
+
+- ENcoder .pix_fmts         = pix_fmts_8bit, 
+
+- GOP preset 策略，可以以API 宏的方式导出
+  switch (pparams->hevc_enc_params.gop_preset_index)
+  {
+  case 1 /*PRESET_IDX_ALL_I*/:
+  case 2 /*PRESET_IDX_IPP*/:
+  case 3 /*PRESET_IDX_IBBB*/:
+  case 6 /*PRESET_IDX_IPPPP*/:
+  case 7 /*PRESET_IDX_IBBBB*/:
+
+ - Enc 的GoP 的控制，在FFmpeg层面还是缺少了灵活性，没法自己设置 Frame type
+
+4. Plan
+
+5. 
