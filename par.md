@@ -9,6 +9,10 @@
 
   A pixel is a pixel, it is a small block of color information. However, some playback devices have different shaped pixels than others. **Computer monitors** have `square pixels` and hence everything that is designed for display on a monitor should have a PAR of 1. **TVs** however have `rectangular pixels` which have a different PAR depending on the format (NTSC or PAL).
 
+![220px-PAR-1to1.svg](/home/barry/Sources/ffmpeg_build/220px-PAR-1to1.svg.png)
+
+![220px-PAR-2to1.svg](/home/barry/Sources/ffmpeg_build/220px-PAR-2to1.svg.png)
+
 - **SAR** : (`Storage Aspect Ratio` or `Sample Aspect Ratio`) `Sample Aspect Ratio` equal to `PAR`,
 
 - **FAR** : (`Frame Aspect Ratio` = `Storage Aspect Ration`, the dimensions of the video frame by *pixel number*) : For example, in Europe and Australia, the PAL system is used. It has a  frame of 720 pixels wide by 576 high（1.25 or 5:4）. In the USA, the NTSC system is  used, with frames being 720 by 480 pixels （1.50 or 3:2 ）
