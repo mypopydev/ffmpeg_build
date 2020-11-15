@@ -14,3 +14,10 @@
   **DAR = FAR x PAR**
 
 Q:  how to playing PAL frames on a 16:9 screen?
+
+## 2. 考虑缩放(scale or resize)和crop
+
+## 3. FFmpeg 中的处理
+
+## 4. 什么地方存储了 Aspect Ration
+
