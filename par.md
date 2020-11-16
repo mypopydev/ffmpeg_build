@@ -23,6 +23,8 @@
 
 Q:  how to playing PAL frames on a 16:9 screen?
 
+Q: Aspect Ratio 和 Screen resolution 是什么关系?
+
 ## 2. 考虑缩放(scale or resize)和crop
 
 ## 3. FFmpeg 中的处理
