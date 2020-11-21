@@ -3,7 +3,7 @@
 ## 1. 介绍几个缩写
 - **DAR** : (`Display Aspect Ratio`) ：The aspect ratio of an image or video is defined as the ratio of its  width to its height. It is expressed in the form of a ratio, such as  16:9, or as a single value, in this case 16 ÷ 9 = 1.778. This is the  aspect ratio of a Widescreen TV, which has a width that is 1.778 times  that of its height. Older types of TV, referred to as Standard TV, used  an aspect ratio of 4:3 = 1.333. In other words, video is displayed on TV with a **DAR** (Display Aspect Ratio) of 16:9 or 4:3. 
 
-- **PAR** : (`Pixel Aspect Ratio` or `Picture Aspect Ratio`, Picture aspect ratio is also called *display aspect ratio* (DAR).) :  expressed as a fraction of horizontal (x) pixel size divided by vertical (y) pixel size. The `pixel aspect ratio` for square pixels is 1/1. In most cases, the PAR will be set equal to 1.0 and the frame (Resize)  set to match the screen of the target device. However, for conversions  relating to TV, things are different. For example, the values of Aspect  Ratio (AR) used in movies for standard TV are as follows. For PAL, the video frames are normally 720x576 pixels, i.e., have a  Frame AR of 5:4 (= 720 ÷ 576) and need a Pixel AR of 64:45 (= 1.4222...) to achieve a display of 16:9 and a PAR of 16:15 (1.0666...) for a  display in 4:3. For NTSC, the frames are 720x480, with a Frame AR = 3:2  and, thus, require a Pixel AR of 32:27 (= 1.185185...) to achieve a  display of 16:9 and a PAR of 8:9 (0.888...) for 4:3. Thus, we have:
+- **PAR** : (`Pixel Aspect Ratio` or `Picture Aspect Ratio`, `Picture aspect ratio` is also called `Display Aspect Ratio` (DAR).) :  `Pixel Aspect Ratio` expressed as a fraction of horizontal (x) pixel size divided by vertical (y) pixel size. The `pixel aspect ratio` for square pixels is 1/1. In most cases, the PAR will be set equal to 1.0 and the frame (Resize)  set to match the screen of the target device. However, for conversions  relating to TV, things are different. For example, the values of Aspect  Ratio (AR) used in movies for standard TV are as follows. For PAL, the video frames are normally 720x576 pixels, i.e., have a  Frame AR of 5:4 (= 720 ÷ 576) and need a Pixel AR of 64:45 (= 1.4222...) to achieve a display of 16:9 and a PAR of 16:15 (1.0666...) for a  display in 4:3. For NTSC, the frames are 720x480, with a Frame AR = 3:2  and, thus, require a Pixel AR of 32:27 (= 1.185185...) to achieve a  display of 16:9 and a PAR of 8:9 (0.888...) for 4:3. Thus, we have:
    \* for PAL, its FAR = 5:4 and PAR = 16:15 (~1.07) for a 4:3 display or 64:45 (~1.42) for a 16:9 display
    \* for NTSC, its FAR = 3:2 and PAR = 8:9 (~0.89) or 32:27 (~1.19).
 
@@ -21,7 +21,7 @@
 
   **DAR = FAR x PAR** or **DAR = SAR x PAR**
 
-Q:  how to playing PAL frames on a 16:9 screen?
+Q:  How to playing PAL frames on a 16:9 screen?
 
 Q: Aspect Ratio 和 Screen resolution 是什么关系?
 
@@ -31,7 +31,15 @@ https://docs.microsoft.com/en-us/windows/win32/medfound/picture-aspect-ratio
 
 Scale + PAD
 
+Sometimes the video image does not have the same shape as the display area. For example, a 4:3 video might be shown on a widescreen (16×9)  television. In computer video, the video might be shown inside a window  that has an arbitrary size. In that case, there are three ways the image can be made to fit within the display area:
+
+- Stretch the image along one axis to fit the display area.
+- Scale the image to fit the display area, while maintaining the original picture aspect ratio.
+- Crop the image.
+
 ## 3. FFmpeg 中的处理
+
+FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`）
 
 ## 4. 什么地方存储了 Aspect Ration (Codec bit stream or Container)
 
