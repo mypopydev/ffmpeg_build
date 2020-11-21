@@ -37,6 +37,8 @@ Sometimes the video image does not have the same shape as the display area. For 
 - Scale the image to fit the display area, while maintaining the original picture aspect ratio.
 - Crop the image.
 
+Stretching the image to fit the display area is almost always wrong,  because it does not preserve the correct picture aspect ratio.
+
 ## 3. FFmpeg 中的处理
 
 FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`）
