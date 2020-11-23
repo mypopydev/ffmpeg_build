@@ -59,4 +59,4 @@ FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`�
 
 ### 4.2 VUI
 
-## 4. 横屏竖屏的转换
+## 4. 横屏(landscape)竖屏(portrait)的转换
