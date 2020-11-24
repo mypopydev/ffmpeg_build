@@ -90,6 +90,39 @@ FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`�
 
 ### 4.2 VUI
 
+HEVC SPEC 中关于 SAR (`Sample Aspect Ratio`) 语法元素的描述如下：
+
+|           vui_parameters(){           | Descriptor |
+| :-----------------------------------: | :--------: |
+|    aspect_ratio_info_present_flag     |    u(1)    |
+|  if(aspect_ratio_info_present_flag){  |            |
+|           aspect_ratio_idc            |    u(8)    |
+| if(aspect_ratio_idc == EXTENDED_SRA){ |            |
+|               sar_width               |   u(16)    |
+|              sar_height               |   u(16)    |
+|                   }                   |            |
+|                   }                   |            |
+
+上面提到的 SAR 语法元素的语义如下：
+
+- aspect_ratio_info_present_flag 值为 1，指定`aspect_ratio_idc`在码流中存在；否则该语法元素不存在。
+- aspect_ratio_idc 指定亮度采样的`SAR`的值。下面的表格展示它的含义。当`aspect_ratio_idc`值为 255，表明`EXTENDED_SRA`时，`SAR`的值 等于`sar_width:sar_height`。当`aspect_ratio_idc`语法不存在时，该值可以被认为是 0。`aspect_ratio_idc`的范围是`17-254`时，未使用，并且不该出现在码流中，此时解码器可以指定为 0。
+- sar_width 表示`SAR`的水平大小。
+- sar_height 表示`SAR`的竖直大小。
+   `sar_width`和`sar_height`等于0、或`aspect_ratio_idc`等于0时，SPEC 未定义它的行为。
+
+| asepct_ratio_idc | Sample aspect ratio | Examples of use(informative)                     |
+| :--------------: | :-----------------: | ------------------------------------------------ |
+|        0         |     Unspecified     |                                                  |
+|        1         |    1:1(“square”)    | 7680x4320 16:9 frame without horizontal overscan |
+|        2         |        12:11        | 720x576 4:3 frame without horizontal overscan    |
+|        3         |        10:11        | 720x480 4:3 frame without horizontal overscan    |
+|        4         |        16:11        | 720x576 16:9 frame without horizontal overscan   |
+|        …         |          …          | …                                                |
+|        16        |         2:1         | 960x1080 16:9 frame without horizontal overscan  |
+|      17…254      |      Reserved       |                                                  |
+|       255        |    EXTENDED_SAR     |                                                  |
+
 ## 5. 横屏(landscape `=`) 竖屏(portrait `||` )的转换
 
 
