@@ -51,9 +51,30 @@ Sometimes the video image does not have the same shape as the display area. For 
 
 method like:
 
-- **Letterboxing**![aspect-ratio02](/home/barry/Sources/ffmpeg_build/images/aspect-ratio02.png)
-- **Pillarboxing**![aspect-ratio03](/home/barry/Sources/ffmpeg_build/images/aspect-ratio03.png)
+- **Letterboxing**
+Transform a video file with 16:9 aspect ratio into a video file with 4:3 aspect ration by correct letter-boxing.
+```
+    ffmpeg \
+        -i input_file \
+        -filter:v "pad=iw:iw*3/4:(ow-iw)/2:(oh-ih)/2" \
+        -c:a copy \
+        output_file
+```
+![aspect-ratio02](/home/barry/Sources/ffmpeg_build/images/aspect-ratio02.png)
+- **Pillarboxing**
+Transform a video file with 4:3 aspect ratio into a video file with 16:9 aspect ration by correct pillar-boxing.
+```
+    ffmpeg \
+        -i input_file \
+        -filter:v "pad=ih*16/9:ih:(ow-iw)/2:(oh-ih)/2" \
+        -c:a copy \
+        output_file
+```
+![aspect-ratio03](/home/barry/Sources/ffmpeg_build/images/aspect-ratio03.png)
 - **Windowboxing**
+
+  ![vidWindowboxing](/home/barry/Sources/ffmpeg_build/images/vidWindowboxing.jpg)
+
 - **Pan-and-Scan**![aspect-ratio04](/home/barry/Sources/ffmpeg_build/images/aspect-ratio04.png)
 
 ## 3. FFmpeg 中的处理
@@ -63,13 +84,13 @@ FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`�
 ## 4. 什么地方存储了 Aspect Ration (Codec bit stream or Container)
 
 ### 4.1 MP4
-- tkhd box
+- tkhd box -- `Matrix` 可以用来表征rotate
 - ares box
 - pasp  (`Pixel Aspect Ratio`) box
 
 ### 4.2 VUI
 
-## 5. 横屏(landscape)竖屏(portrait)的转换
+## 5. 横屏(landscape `=`) 竖屏(portrait `||` )的转换
 
 
 
