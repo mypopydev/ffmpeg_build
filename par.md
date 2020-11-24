@@ -27,6 +27,14 @@ Q: Aspect Ratio 和 Screen resolution 是什么关系?
 
 ## 2. 考虑缩放(scale or resize)和crop
 
+Here’s a quick breakdown of all the ideal aspect ratios for major social media platforms:
+
+- **Facebook:** 16:9 or 9:16 (max upload 4k - 3840 x 2160)
+- **Instagram:** 16:9 or 9:16 (max upload 1080p)
+- **Twitter:** 16:9 (max upload 1080p)
+- **Snapchat:** 9:16 (1080 x 1920)
+- **YouTube:** 16:9 (max upload 4k - 3840 x 2160)
+
 https://docs.microsoft.com/en-us/windows/win32/medfound/picture-aspect-ratio
 
 Scale + PAD
@@ -62,5 +70,7 @@ FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`�
 ### 4.2 VUI
 
 ## 5. 横屏(landscape)竖屏(portrait)的转换
+
+
 
 ## 6. 加上Rotate metadata 又怎样
