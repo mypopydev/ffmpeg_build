@@ -33,6 +33,8 @@ Scale + PAD
 
 Sometimes the video image does not have the same shape as the display area. For example, a 4:3 video might be shown on a widescreen (16×9)  television. In computer video, the video might be shown inside a window  that has an arbitrary size. In that case, there are three ways the image can be made to fit within the display area:
 
+![aspect-ratio01](/home/barry/Sources/ffmpeg_build/images/aspect-ratio01.png)
+
 - Stretch the image along one axis to fit the display area. (Stretching the image to fit the display area is almost always wrong,  because it does not preserve the correct picture aspect ratio.)
 
 - Scale the image to fit the display area, while maintaining the original picture aspect ratio.
@@ -41,10 +43,10 @@ Sometimes the video image does not have the same shape as the display area. For 
 
 method like:
 
-- **Letterboxing**
-- **Pillarboxing**
+- **Letterboxing**![aspect-ratio02](/home/barry/Sources/ffmpeg_build/images/aspect-ratio02.png)
+- **Pillarboxing**![aspect-ratio03](/home/barry/Sources/ffmpeg_build/images/aspect-ratio03.png)
 - **Windowboxing**
-- **Pan-and-Scan**
+- **Pan-and-Scan**![aspect-ratio04](/home/barry/Sources/ffmpeg_build/images/aspect-ratio04.png)
 
 ## 3. FFmpeg 中的处理
 
@@ -59,4 +61,6 @@ FFmpeg 使用 SAR （`Sample Aspect Ratio`）和 DAR （`Display Aspect Ratio`�
 
 ### 4.2 VUI
 
-## 4. 横屏(landscape)竖屏(portrait)的转换
+## 5. 横屏(landscape)竖屏(portrait)的转换
+
+## 6. 加上Rotate metadata 又怎样
