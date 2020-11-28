@@ -1,6 +1,13 @@
 # Aspect Ratio 简介
 
 ## 1. 介绍几个缩写
+
+三个Apsect Ratio
+
+- 描述显示：
+- 描述图像：图像的宽高比，以Pixel为单位
+- 描述单个Pixel：正方形 or 长方形
+
 - **DAR** : (`Display Aspect Ratio`) ：The aspect ratio of an image or video is defined as the ratio of its  width to its height. It is expressed in the form of a ratio, such as  16:9, or as a single value, in this case 16 ÷ 9 = 1.778. This is the  aspect ratio of a Widescreen TV, which has a width that is 1.778 times  that of its height. Older types of TV, referred to as Standard TV, used  an aspect ratio of 4:3 = 1.333. In other words, video is displayed on TV with a **DAR** (Display Aspect Ratio) of 16:9 or 4:3. 
 
    ![comp_vs_mobile](/home/barry/Sources/ffmpeg_build/images/comp_vs_mobile.png)
@@ -127,6 +134,11 @@ HEVC SPEC 中关于 SAR (`Sample Aspect Ratio`) 语法元素的描述如下：
 
 ## 5. 横屏(landscape `=`) 竖屏(portrait `||` )的转换
 
+We will face at two equally unacceptable situations: the video player **does not apply the rotation metatag** contained into the video, or the video player adds **two lateral black bands**:
 
+https://www.rigacci.org/wiki/doku.php/doc/appunti/linux/video/fix_smartphone_portrait_videos
 
 ## 6. 加上Rotate metadata 又怎样
+
+- MPEG TS 没有ratate相关参数，MP4 有，所以 remux MP4 to TS，会丢失旋转信息
+- MP4 在 tkhd
