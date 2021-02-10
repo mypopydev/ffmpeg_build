@@ -1,5 +1,7 @@
 1. GPR
 
+https://www.sandpile.org/x86/gpr.htm
+
 2. Ins type
 
 • Data transfer
